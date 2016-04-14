@@ -1,49 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>{{$Title}}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <style type="text/css">
-        html, body {
-            width: 100%;
-            height: 100%;
-        }
-
-        * {
-            margin: 0px;
-            padding: 0px;
-        }
-
-        body, button, input, select, textarea {
-            font: 12px/16px Verdana, Helvetica, Arial, sans-serif;
-        }
-
-        #container {
-            min-width: 100%;
-            min-height: 100%;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />    
+    <!-- Bootstrap -->
+    <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" media="screen" href="{{$rootpath}}/css/style.css">
 </head>
 <body>
     <!--   定义地图显示容器   -->
     <div id="container"></div>
+    <button class="btn btn-default" id="btnPost">发起救助</button>
+    <div id="ctxPoster" >        
+        <div class="modal-content" style="box-shadow:none;border-radius:0px;position:absolute;width:100%;">
+            <div class="modal-header" style="height: 60px;   ">
+                <button type="button" class="close btnClose">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    发起一个救助
+                </h4>
+            </div>
+            <div class="modal-body" style="height: 140px; overflow: auto;  " >
+                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
+                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
+                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
+                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
+                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
+                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
+                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
+                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
+                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
+                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
+                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
+                aaaaasdasdasdasdasd<br />
+            </div>
+            <div class="modal-footer" style="height: 65px;   ">
+                <button type="button" class="btn btn-default btnClose">
+                    关闭
+                </button>
+                <button type="button" class="btn btn-primary">
+                    发起
+                </button>
+            </div>
+        </div>
+    </div>
     <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="http://apis.map.qq.com/tools/geolocation?key=EBWBZ-CZN3K-4O5JK-A3WQF-5HOCS-HUB2O&referer={{$Title}}"></iframe>
 
 
 
     <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key={{$MapKey}}"></script>
-    <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script>
         var map;
         $(document).ready(function () {
+            $(".modal-body").css("height",$(window).height()-125);
             initMap();
             locateUser();
+            initCtxPoster();
         });
         function initMap() {
             map = new qq.maps.Map(document.getElementById("container"), {
                 center: new qq.maps.LatLng(22.543670, 114.059640),      // 地图的中心地理坐标。
-                zoom: 13                                                // 地图的中心地理坐标。
+                zoom: 14                                               // 地图的中心地理坐标。
             });
         }
         function locateUser() {
@@ -66,6 +88,17 @@
                 }
             }, false);
         }
+        function initCtxPoster() {
+
+            $("#ctxPoster").hide();
+            $("#btnPost").click(function () {
+                $("#ctxPoster").fadeIn();
+            });
+            $("#ctxPoster .btnClose").click(function () {
+                $("#ctxPoster").fadeOut();
+            });
+        }
+        
     </script>
 </body>
 
