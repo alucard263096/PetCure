@@ -6,11 +6,10 @@
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
   require 'include/common.inc.php';
-  include ROOT.'/include/init.inc.php';
+  require ROOT.'/classes/mgr/verifycode.cls.php';
   
-
-  
-  
-  $smarty->display(ROOT.'/templates/index.html');
+$_vc = new VerifyCode();  //实例化一个对象
+$_vc->doimg();  
+$_SESSION[SESSIONNAME]['verifycode'] = $_vc->getCode();//验证码保存到SESSION中
   
 ?>
