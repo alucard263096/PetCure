@@ -5,7 +5,7 @@ $CONFIG['rootpath']		= '/PetCure/UI';
 //$CONFIG['charset']		= 'utf-8'; 
 $CONFIG['URL']="http://www.myhkdoc.com/PetCure/UI";
 $CONFIG["SessionName"]="PetCure";
-$CONFIG["Title"]="³èÎï¾ÈÖúÕ¾";
+$CONFIG["Title"]="å® ç‰©æ•‘åŠ©ç«™";
 
 $CONFIG['smarty']['rootpath']		= '/PetCure/UI'; 
 $CONFIG['solution_configuration']='release';
