@@ -22,6 +22,7 @@
     <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script>
         var map;
+        var loc;
         $(document).ready(function () {
             initCtxPoster();
             initMap();
@@ -36,21 +37,8 @@
         function locateUser() {
             window.addEventListener('message', function (event) {
                 // 接收位置信息
-                var loc = event.data;
-                if (loc && loc.module == 'geolocation') { //定位成功,防止其他应用也会向该页面post信息，需判断module是否为'geolocation'
-                    var center = new qq.maps.LatLng(loc.lat, loc.lng);
-
-                    map.setCenter(center);
-                    var marker = new qq.maps.Marker({
-                        //设置Marker的位置坐标
-                        position: center,
-                        //设置显示Marker的地图
-                        map: map
-                    });
-                    marker.setTitle("我的位置");
-                } else { //定位组件在定位失败后，也会触发message, event.data为null
-                    alert('定位失败');
-                }
+                loc = event.data;
+                markLocation();
             }, false);
         }
         function initCtxPoster() {
@@ -60,6 +48,25 @@
                     $("#ctxPoster").fadeIn();
                 });
             });
+        }
+        function markLocation() {
+            if (loc && loc.module == 'geolocation') { //定位成功,防止其他应用也会向该页面post信息，需判断module是否为'geolocation'
+                var center = new qq.maps.LatLng(loc.lat, loc.lng);
+
+                map.setCenter(center);
+                var marker = new qq.maps.Marker({
+                    //设置Marker的位置坐标
+                    position: center,
+                    //设置显示Marker的地图
+                    map: map
+                });
+                marker.setTitle("我的位置");
+                if ($("#ctxPoster #txtAddress").length > 0) {
+                    $("#ctxPoster #txtAddress").val(loc.addr);
+                }
+            } else { //定位组件在定位失败后，也会触发message, event.data为null
+                alert('定位失败');
+            }
         }
         
     </script>
