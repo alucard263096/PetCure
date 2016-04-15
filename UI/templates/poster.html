@@ -1,0 +1,122 @@
+
+<div class="modal-content" style="box-shadow:none;border-radius:0px;position:absolute;width:100%;">
+    <div class="modal-header" style="height: 60px;   ">
+        <button type="button" class="close btnClose" >
+            &times;
+        </button>
+        <h4 class="modal-title" id="lblTitle" >
+            填写流浪宠相关资料
+        </h4>
+    </div>
+    <div class="modal-body" style="height: 140px; overflow: auto;  ">
+        <div class="row">
+            <form class="form-horizontal">
+                <div class="col-sm-12">
+                    <div id="step1" class="steppanel" title="填写流浪宠相关资料">
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label" >宠物类型 <span style="color:red;">*</span></label>
+                            <div class="col-lg-10">
+                                <select class="form-control">
+                                    <option>选择宠物类型</option>
+                                    <option>狗</option>
+                                    <option>猫</option>
+                                    <option>其它</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">颜色</label>
+                            <div class="col-lg-10">
+                                <input class="form-control"  type="text" placeholder="简单描述流浪宠的颜色">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">体型</label>
+                            <div class="col-lg-10">
+                                <select class="form-control">
+                                    <option>选择宠物体型</option>
+                                    <option>小</option>
+                                    <option>中</option>
+                                    <option>大</option>
+                                    <option>微型</option>
+                                    <option>巨</option>
+                                    <option>其它</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">品种</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" placeholder="请尝试描述宠物的品种">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">上传图片 <span style="color:red;">*</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control uniform_on"  type="file">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="step2" class="steppanel" title="填写流浪宠的救助状态">
+                        第二部
+                    </div>
+                    <div id="step3" class="steppanel" title="填写联系人信息">
+                        第三步
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" style="height: 65px;   ">
+        <button type="button" class="btn btn-default btnClose">
+            关闭
+        </button>
+        <button type="button" class="btn btn-default" disabled="disabled" id="btnPrevious">
+            上一步
+        </button>
+        <button type="button" class="btn btn-primary" id="btnNext">
+            下一步
+        </button>
+    </div>
+</div>
+<script>
+    var step = 1;
+    $(document).ready(function () {
+        $("#ctxPoster .modal-body").css("height", $(window).height() - 125);
+        LoadStepContent(step);
+        $("#ctxPoster .btnClose").click(function () {
+            $("#ctxPoster").fadeOut();
+        });
+
+        $("#ctxPoster #btnNext").click(function () {
+            if (step == 3) {
+                alert("发布成功");
+            } else {
+                step++;
+                LoadStepContent(step);
+            }
+        });
+        $("#ctxPoster #btnPrevious").click(function () {
+            if (step >1) {
+                step--;
+                LoadStepContent(step);
+            }
+        });
+        
+    });
+    function LoadStepContent(num) {
+        $("#ctxPoster .steppanel").hide();
+        $("#ctxPoster #step" + num).show();
+        $("#ctxPoster #lblTitle").text($("#ctxPoster #step" + num).attr("title"));
+        if (step > 1) {
+            $("#ctxPoster #btnPrevious").prop("disabled",false);
+        } else {
+            $("#ctxPoster #btnPrevious").prop("disabled", true);
+        }
+        if (step == 3) {
+            $("#ctxPoster #btnNext").text("立即发布");
+        } else {
+            $("#ctxPoster #btnNext").text("下一步");
+        }
+    }
+</script>

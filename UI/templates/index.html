@@ -14,42 +14,8 @@
     <div id="container"></div>
     <button class="btn btn-default" id="btnPost">发起救助</button>
     <div id="ctxPoster" >        
-        <div class="modal-content" style="box-shadow:none;border-radius:0px;position:absolute;width:100%;">
-            <div class="modal-header" style="height: 60px;   ">
-                <button type="button" class="close btnClose">
-                    &times;
-                </button>
-                <h4 class="modal-title" id="myModalLabel">
-                    发起一个救助
-                </h4>
-            </div>
-            <div class="modal-body" style="height: 140px; overflow: auto;  " >
-                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
-                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
-                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
-                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
-                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
-                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
-                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
-                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
-                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
-                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
-                aaaaasdasdasdasdasd<br />                aaaaasdasdasdasdasd<br />
-                aaaaasdasdasdasdasd<br />
-            </div>
-            <div class="modal-footer" style="height: 65px;   ">
-                <button type="button" class="btn btn-default btnClose">
-                    关闭
-                </button>
-                <button type="button" class="btn btn-primary">
-                    发起
-                </button>
-            </div>
-        </div>
     </div>
     <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="http://apis.map.qq.com/tools/geolocation?key=EBWBZ-CZN3K-4O5JK-A3WQF-5HOCS-HUB2O&referer={{$Title}}"></iframe>
-
-
 
     <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key={{$MapKey}}"></script>
     <script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
@@ -57,10 +23,9 @@
     <script>
         var map;
         $(document).ready(function () {
-            $(".modal-body").css("height",$(window).height()-125);
+            initCtxPoster();
             initMap();
             locateUser();
-            initCtxPoster();
         });
         function initMap() {
             map = new qq.maps.Map(document.getElementById("container"), {
@@ -89,13 +54,11 @@
             }, false);
         }
         function initCtxPoster() {
-
             $("#ctxPoster").hide();
             $("#btnPost").click(function () {
-                $("#ctxPoster").fadeIn();
-            });
-            $("#ctxPoster .btnClose").click(function () {
-                $("#ctxPoster").fadeOut();
+                $("#ctxPoster").load("{{$rootpath}}/poster.php", function () {
+                    $("#ctxPoster").fadeIn();
+                });
             });
         }
         
