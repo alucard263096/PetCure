@@ -26,7 +26,6 @@
 	$_REQUEST["pet_photo"]=$filename;
 
 	$posterMgr->poster($_REQUEST);
-
   }
 
   ParentRedirect("index.php");
