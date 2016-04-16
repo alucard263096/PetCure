@@ -10,56 +10,43 @@
     </div>
     <div class="modal-body" style="height: 140px; overflow: auto;  ">
         <div class="row">
-            <form class="form-horizontal">
+            <form class="form-horizontal" id="frompost" action="posterform.php" method="post" enctype="multipart/form-data">
                 <div class="col-sm-12">
                     <div id="step1" class="steppanel" title="填写流浪宠相关资料">
                         <div class="form-group">
-                            <label class="col-lg-2 control-label" >宠物类型 <span style="color:red;">*</span></label>
+                            <label class="col-lg-2 control-label">上传图片 <span style="color:red;">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control">
-                                    <option>选择宠物类型</option>
-                                    <option>狗</option>
-                                    <option>猫</option>
-                                    <option>其它</option>
-                                </select>
+                                <input class="form-control  notnull" type="file" name="pet_photo" id="pet_photo">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">颜色</label>
+                            <label class="col-lg-2 control-label">宠物类型 <span style="color:red;">*</span></label>
                             <div class="col-lg-10">
-                                <input class="form-control"  type="text" placeholder="简单描述流浪宠的颜色">
+                                <select class="form-control notnull" name="pet_type" id="pet_type">
+                                    <option value="">选择宠物类型</option>
+                                    <option value="D">狗</option>
+                                    <option value="C">猫</option>
+                                    <option value="O">其它</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">体型</label>
                             <div class="col-lg-10">
-                                <select class="form-control">
-                                    <option>选择宠物体型</option>
-                                    <option>小</option>
-                                    <option>中</option>
-                                    <option>大</option>
-                                    <option>微型</option>
-                                    <option>巨</option>
-                                    <option>其它</option>
+                                <select class="form-control" name="pet_size" id="pet_size">
+                                    <option value="S" selected="selected">小</option>
+                                    <option value="M">中</option>
+                                    <option value="B">大</option>
+                                    <option value="W">微型</option>
+                                    <option value="G">巨</option>
+                                    <option value="O">其它</option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">品种</label>
-                            <div class="col-lg-10">
-                                <input class="form-control" type="text" placeholder="请尝试描述宠物的品种">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">上传图片 <span style="color:red;">*</span></label>
-                            <div class="col-lg-10">
-                                <input class="form-control " type="file">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">简单描述</label>
                             <div class="col-lg-10">
-                                <input class="form-control" type="text" placeholder="更加简单的补充一下流浪宠的样子">
+                                <input class="form-control" type="text" placeholder="更加简单的补充一下流浪宠的样子" name="pet_detail" id="pet_detail" maxlength="255">
                             </div>
                         </div>
                     </div>
@@ -67,20 +54,20 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">救助类型 <span style="color:red;">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control">
-                                    <option>选择救助类型</option>
-                                    <option>受伤</option>
-                                    <option>饥饿</option>
-                                    <option>走失</option>
-                                    <option>待领养</option>
-                                    <option>其它</option>
+                                <select class="form-control notnull" name="rescue_type" id="rescue_type">
+                                    <option value="">选择救助类型</option>
+                                    <option value="W">受伤</option>
+                                    <option value="H">饥饿</option>
+                                    <option value="L">走失</option>
+                                    <option value="A">待领养</option>
+                                    <option value="O">其它</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">紧急程度 <span style="color:red;">*</span></label>
+                            <label class="col-lg-2 control-label">紧急程度</label>
                             <div class="col-lg-10">
-                                <select class="form-control">
+                                <select class="form-control" name="rescue_level" id="rescue_level">
                                     <option>严重</option>
                                     <option>高</option>
                                     <option selected="selected">中</option>
@@ -89,21 +76,24 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">定点位置 <span style="color:red;">*</span></label>
+                            <label class="col-lg-2 control-label">定点位置</label>
                             <div class="col-lg-10">
-                                <input class="form-control" type="text" id="txtAddress" >
+                                <input class="form-control " type="text" name="rescue_address" id="rescue_address" maxlength="255" readonly="readonly">
                             </div>
+                            <p class="col-lg-12 ">如果定位位置和救助位置不同，请打开地图长按正确位置</p>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">具体地点补充</label>
                             <div class="col-lg-10">
-                                <input class="form-control" type="text" placeholder="补充下具体位置，例如墙角下之类的">
+                                <input class="form-control" type="text" placeholder="补充下具体位置，例如墙角下之类的" name="rescue_detail" id="rescue_detail" maxlength="255">
                             </div>
                         </div>
+                        <input type="hidden" name="rescue_lat" id="rescue_lat" value="" />
+                        <input type="hidden" name="rescue_lng" id="rescue_lng" value="" />
                         <div class="form-group">
                             <label class="col-lg-2 control-label">所需救助</label>
                             <div class="col-lg-10">
-                                <input class="form-control" type="text" placeholder="当前这只流浪宠具体需要什么救助" >
+                                <input class="form-control" type="text" placeholder="当前这只流浪宠具体需要什么救助" name="rescue_need" id="rescue_need" maxlength="255">
                             </div>
                         </div>
                     </div>
@@ -111,27 +101,28 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">联系人姓名</label>
                             <div class="col-lg-10">
-                                <input class="form-control" type="text" placeholder="有需要时候可以找到你">
+                                <input class="form-control" type="text" placeholder="有需要时候可以找到你" name="contact_name" id="contact_name" maxlength="255">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">联系人电话</label>
                             <div class="col-lg-10">
-                                <input class="form-control" type="text" placeholder="有需要时候可以找到你">
+                                <input class="form-control" type="number" placeholder="有需要时候可以找到你" name="contact_mobile" id="contact_mobile" maxlength="11">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">QQ</label>
                             <div class="col-lg-10">
-                                <input class="form-control" type="text" placeholder="有需要时候可以找到你">
+                                <input class="form-control" type="number" placeholder="有需要时候可以找到你" name="contact_qq" id="contact_qq" maxlength="20">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">微信号</label>
                             <div class="col-lg-10">
-                                <input class="form-control" type="text" placeholder="有需要时候可以找到你">
+                                <input class="form-control" type="number" placeholder="有需要时候可以找到你" name="contact_wechat" id="contact_wechat" maxlength="20">
                             </div>
                         </div>
+                        <input type="hidden" name="verify" id="verify" value="{{$verify}}" />
                     </div>
                 </div>
             </form>
@@ -151,17 +142,32 @@
 </div>
 <script>
     var step = 1;
+    var max_step = 3;
     $(document).ready(function () {
         $("#ctxPoster .modal-body").css("height", $(window).height() - 125);
+        max_step = $("#ctxPoster .steppanel").length;
         LoadStepContent(step);
         $("#ctxPoster .btnClose").click(function () {
             $("#ctxPoster").fadeOut();
         });
 
         $("#ctxPoster #btnNext").click(function () {
-            if (step == 3) {
-                alert("发布成功");
+            if (step == max_step) {
+                $("#frompost").submit();
             } else {
+                var allnotnull = false;
+                $("#step" + step.toString() + " .notnull").each( function () {
+                    if ($(this).val() == "") {
+                        $(this).parent().parent().addClass("has-error");
+                        allnotnull = true;
+                    } else {
+                        $(this).parent().parent().removeClass("has-error");
+                    }
+                });
+                if (allnotnull) {
+                    alert("请完成*号标记的必填项");
+                    return;
+                }
                 step++;
                 LoadStepContent(step);
             }
@@ -185,10 +191,10 @@
         } else {
             $("#ctxPoster #btnPrevious").prop("disabled", true);
         }
-        if (step == 3) {
+        if (step == max_step) {
             $("#ctxPoster #btnNext").text("立即发布");
-        } else {
-            $("#ctxPoster #btnNext").text("下一步");
+        }  else {
+            $("#ctxPoster #btnNext").text("还有"+(max_step-step).toString()+"步");
         }
     }
 </script>

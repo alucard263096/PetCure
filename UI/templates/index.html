@@ -23,6 +23,7 @@
     <script>
         var map;
         var loc;
+        var myMark;
         $(document).ready(function () {
             initCtxPoster();
             initMap();
@@ -52,17 +53,26 @@
         function markLocation() {
             if (loc && loc.module == 'geolocation') { //定位成功,防止其他应用也会向该页面post信息，需判断module是否为'geolocation'
                 var center = new qq.maps.LatLng(loc.lat, loc.lng);
-
+                
                 map.setCenter(center);
-                var marker = new qq.maps.Marker({
-                    //设置Marker的位置坐标
-                    position: center,
-                    //设置显示Marker的地图
-                    map: map
-                });
-                marker.setTitle("我的位置");
-                if ($("#ctxPoster #txtAddress").length > 0) {
-                    $("#ctxPoster #txtAddress").val(loc.addr);
+                if (myMark == null) {
+
+                    var myMark = new qq.maps.Marker({
+                        //设置Marker的位置坐标
+                        position: center,
+                        //设置显示Marker的地图
+                        map: map
+                    });
+
+                } else {
+                    myMark.setPosition(center);
+                }
+
+                
+                if ($("#ctxPoster #rescue_address").length > 0) {
+                    $("#ctxPoster #rescue_address").val(loc.addr);
+                    $("#ctxPoster #rescue_lat").val(loc.lat);
+                    $("#ctxPoster #rescue_lng").val(loc.lng);
                 }
             } else { //定位组件在定位失败后，也会触发message, event.data为null
                 alert('定位失败');

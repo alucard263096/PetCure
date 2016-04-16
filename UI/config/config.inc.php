@@ -28,7 +28,7 @@ $CONFIG['error_handler'] ="E_ALL";
 #[Database]
 $CONFIG['database']['provider']	= 'mysql';  //mssql,sqlsrv
 $CONFIG['database']['host']		= 'www.myhkdoc.com';  
-$CONFIG['database']['database']	= 'PETCURE160415';  
+$CONFIG['database']['database']	= 'cw_petcure';  
 $CONFIG['database']['user']		= 'root';  
 $CONFIG['database']['psw']		= 'root'; 
 

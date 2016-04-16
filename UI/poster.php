@@ -8,7 +8,7 @@
   require 'include/common.inc.php';
   include ROOT.'/include/init.inc.php';
   
-
+  $smarty->assign("verify",md5(time().$file["name"]));
   
   
   $smarty->display(ROOT.'/templates/poster.html');
