@@ -54,6 +54,20 @@
 		$query = $this->dbmgr->query($sql);
 
 	}
+
+	public function getPosterList($lat,$lng){
+
+		$sql="select *,abs((rescue_lat-$lat)*(rescue_lat-$lat)+(rescue_lng-$lng)*(rescue_lng-$lng)) distance
+ from tb_poster
+		where DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='A'
+		order by distance
+		limit 0,100  ";
+		$query = $this->dbmgr->query($sql);
+		$return = $this->dbmgr->fetch_array_all($query);
+
+		return $return;
+	}
+
 	public  function __destruct ()
 	{
 		

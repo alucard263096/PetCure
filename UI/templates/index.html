@@ -15,25 +15,56 @@
     <button class="btn btn-default" id="btnPost">发起救助</button>
     <div id="ctxPoster" >        
     </div>
+    <div id="markset" class="hide"></div>
     <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="http://apis.map.qq.com/tools/geolocation?key=EBWBZ-CZN3K-4O5JK-A3WQF-5HOCS-HUB2O&referer={{$Title}}"></iframe>
 
     <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key={{$MapKey}}"></script>
     <script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script>
-        var map;
-        var loc;
-        var myMark;
+        var map=null;
+        var loc=null;
+        var myMark = null;
+        var posterMarks = new Array();
+        var posterLabels = new Array();
+        var touchstart = 0;
+        var tmpLat = 0;
+        var tmpLng = 0;
+        var setPointForPoster = false;
         $(document).ready(function () {
             initCtxPoster();
             initMap();
             locateUser();
+
+            setTimeout(function () {
+                document.getElementById("geoPage")
+                        .contentWindow.postMessage('getLocation.robust', '*');
+            }, 60000);
+
         });
         function initMap() {
             map = new qq.maps.Map(document.getElementById("container"), {
                 center: new qq.maps.LatLng(22.543670, 114.059640),      // 地图的中心地理坐标。
-                zoom: 14                                               // 地图的中心地理坐标。
+                zoom: 16
             });
+            qq.maps.event.addListener(map, 'click', function (e) {
+                tmpLat = e.latLng.getLat();
+                tmpLng = e.latLng.getLng();
+            });
+            document.getElementById("container").addEventListener('touchstart', function (event) {
+                touchstart = new Date().getTime();
+                setPointForPoster = false;
+            }, true);
+            document.getElementById("container").addEventListener('touchend', function (event) {
+                var touchend = new Date().getTime();
+                if (touchend-touchstart >= 1000) {
+                    setPointForPoster = true;
+                    $("#ctxPoster").load("{{$rootpath}}/poster.php", function () {
+                        $("#ctxPoster").fadeIn();
+                    });
+                }
+            }, true);
+
         }
         function locateUser() {
             window.addEventListener('message', function (event) {
@@ -57,7 +88,7 @@
                 map.setCenter(center);
                 if (myMark == null) {
 
-                    var myMark = new qq.maps.Marker({
+                    myMark = new qq.maps.Marker({
                         //设置Marker的位置坐标
                         position: center,
                         //设置显示Marker的地图
@@ -67,18 +98,113 @@
                 } else {
                     myMark.setPosition(center);
                 }
+                posterLoad(loc.lat, loc.lng);
 
                 
                 if ($("#ctxPoster #rescue_address").length > 0) {
-                    $("#ctxPoster #rescue_address").val(loc.addr);
-                    $("#ctxPoster #rescue_lat").val(loc.lat);
-                    $("#ctxPoster #rescue_lng").val(loc.lng);
+                    if (setPointForPoster) {
+
+                        $("#ctxPoster #rescue_address").val("地图中标识的点");
+                        $("#ctxPoster #rescue_lat").val(tmpLat);
+                        $("#ctxPoster #rescue_lng").val(tmpLng);
+                    } else {
+
+                        $("#ctxPoster #rescue_address").val(loc.addr);
+                        $("#ctxPoster #rescue_lat").val(loc.lat);
+                        $("#ctxPoster #rescue_lng").val(loc.lng);
+                    }
                 }
             } else { //定位组件在定位失败后，也会触发message, event.data为null
                 alert('定位失败');
+                posterLoad(22.543670, 114.059640);
             }
         }
-        
+        function posterLoad(lat, lng) {
+            var json = {
+                "lat": lat, "lng": lng
+            }
+            $.get("setposter.php", json, function (e) {
+                try {
+
+                    for (i = 0; i < posterMarks.length; i++) {
+                        posterMarks[i].setMap(null);
+                    }
+                    for (i = 0; i < posterLabels.length; i++) {
+                        posterLabels[i].setMap(null);
+                    }
+
+                    var obj = JSON.parse(e);
+                    for (i = 0; i < obj["val"].length; i++) {
+                        var arr = obj["val"][i];
+                        //addPosterMark(arr);
+                        addPosterLabel(arr);
+                        
+
+
+                    }
+                }
+                catch (e) {
+                    alert(e.message);
+                }
+            });
+        }
+        function addPosterMark(arr) {
+            var posterMark = new qq.maps.Marker({
+                //设置Marker的位置坐标
+                position: new qq.maps.LatLng(arr.rescue_lat, arr.rescue_lng),
+                //设置显示Marker的地图
+                map: map
+            });
+            var imageurl = "{{$uploadpath}}/pet/" + arr.pet_photo;
+            var anchor = new qq.maps.Point(0, 39),
+size = new qq.maps.Size(50, 50),
+origin = new qq.maps.Point(0, 0),
+scaleSize = new qq.maps.Size(40, 40),
+icon = new qq.maps.MarkerImage(
+imageurl,
+size,
+origin,
+anchor,
+scaleSize
+);
+
+            qq.maps.event.addListener(posterMark, 'icon_changed', function () {
+                //alert($("[src$='" + posterMark.getIcon().url + "']").length);
+
+            });
+
+            posterMark.setIcon(icon);
+
+            posterMarks[i] = posterMark;
+        }
+        function addPosterLabel(arr) {
+            var labelcontent = "其他";
+            switch (arr.rescue_type) {
+                case "W": label = "受伤"; break;
+                case "H": label = "饥饿"; break;
+                case "L": label = "走失"; break;
+                case "A": label = "待领养"; break;
+            }
+
+            var labelcolor = "black";
+            switch (arr.rescue_level) {
+                case "C": labelcolor = "red"; break;
+                case "H": labelcolor = "orange"; break;
+                case "M": labelcolor = "blue"; break;
+                case "L": labelcolor = "green"; break;
+            }
+
+            var label = new qq.maps.Label({
+                position: new qq.maps.LatLng(arr.rescue_lat, arr.rescue_lng),
+                map: map,
+                content: "<img class='img-circle' style='width:50px;height:50px;' src='" + "{{$uploadpath}}/pet/" + arr.pet_photo + "' /><br>" + labelcontent,
+                style: { "color": labelcolor, "text-align": "center", "background": "transparent","border":"0px" }
+            });
+
+
+            posterLabels[i] = label;
+        }
+
     </script>
 </body>
 
