@@ -20,7 +20,7 @@
 	}
 	public function poster($request){
 		
-
+		$this->dbmgr->begin_trans();
 		$id = $this->dbmgr->getNewId("tb_poster");
 
 		$verify=parameter_filter($request["verify"]);
@@ -52,6 +52,23 @@
 				
 		 ";
 		$query = $this->dbmgr->query($sql);
+		 
+		$rid = $this->dbmgr->getNewId("tb_poster_record");
+		
+		$sql="insert into tb_poster_record (id,poster_id,created_date,
+		pet_photo,pet_detail,
+		rescue_type,rescue_level,rescue_address,rescue_detail,rescue_need,rescue_lat,rescue_lng,
+		contact_name,contact_mobile,contact_qq,contact_wechat) values
+		($rid,$id,now(),
+		'$pet_photo','$pet_detail',
+		'$rescue_type','$rescue_level','$rescue_address','$rescue_detail','$rescue_need','$rescue_lat','$rescue_lng',
+		'$contact_name','$contact_mobile','$contact_qq','$contact_wechat')
+		 ";
+		$query = $this->dbmgr->query($sql);
+
+
+
+		$this->dbmgr->commit_trans();
 
 	}
 

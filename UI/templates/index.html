@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
@@ -13,8 +13,8 @@
     <!--   定义地图显示容器   -->
     <div id="container"></div>
     <button class="btn btn-default" id="btnPost">发起救助</button>
-    <div id="ctxPoster" >        
-    </div>
+    <div id="ctxPoster" ></div>
+    <div id="showPoster"></div>
     <div id="markset" class="hide"></div>
     <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="http://apis.map.qq.com/tools/geolocation?key=EBWBZ-CZN3K-4O5JK-A3WQF-5HOCS-HUB2O&referer={{$Title}}"></iframe>
 
@@ -61,15 +61,17 @@
                     $("#ctxPoster").load("{{$rootpath}}/poster.php", function () {
                         $("#ctxPoster").fadeIn();
                     });
-                }, 1000);
+                }, 2000);
             }, true);
             document.getElementById("container").addEventListener('touchend', function (event) {
                 var touchend = new Date().getTime();
-                if (touchend-touchstart < 1000) {
+                if (touchend-touchstart < 2000) {
                     clearTimeout(touchTimeout);
                 }
             }, true);
-
+            info = new qq.maps.InfoWindow({
+                map: map
+            });
         }
         function locateUser() {
             window.addEventListener('message', function (event) {
@@ -175,7 +177,6 @@ scaleSize
 
             qq.maps.event.addListener(posterMark, 'icon_changed', function () {
                 //alert($("[src$='" + posterMark.getIcon().url + "']").length);
-
             });
 
             posterMark.setIcon(icon);
@@ -183,29 +184,51 @@ scaleSize
             posterMarks[i] = posterMark;
         }
         function addPosterLabel(arr) {
-            var labelcontent = "其他";
+            var labelRescueType = "其他";
             switch (arr.rescue_type) {
-                case "W": labelcontent = "受伤"; break;
-                case "H": labelcontent = "饥饿"; break;
-                case "L": labelcontent = "走失"; break;
-                case "A": labelcontent = "待领养"; break;
+                case "W": labelRescueType = "受伤"; break;
+                case "H": labelRescueType = "饥饿"; break;
+                case "L": labelRescueType = "走失"; break;
+                case "A": labelRescueType = "待领养"; break;
+            }
+            lblPetType = "其它";
+            switch (arr.pet_type) {
+                case "D": lblPetType = "狗狗"; break;
+                case "C": lblPetType = "猫猫"; break;
+                case "O": lblPetType = "小可爱"; break;
             }
 
             var labelcolor = "black";
+            var labelRescueLevel = "其它";
             switch (arr.rescue_level) {
-                case "C": labelcolor = "red"; break;
-                case "H": labelcolor = "orange"; break;
-                case "M": labelcolor = "blue"; break;
-                case "L": labelcolor = "green"; break;
+                case "C": labelcolor = "red"; labelRescueLevel = "严重"; break;
+                case "H": labelcolor = "orange"; labelRescueLevel = "高"; break;
+                case "M": labelcolor = "blue"; labelRescueLevel = "中"; break;
+                case "L": labelcolor = "green"; labelRescueLevel = "低"; break;
             }
 
             var label = new qq.maps.Label({
                 position: new qq.maps.LatLng(arr.rescue_lat, arr.rescue_lng),
                 map: map,
-                content: "<img class='img-circle' style='width:50px;height:50px;' src='" + "{{$uploadpath}}/pet/" + arr.pet_photo + "' /><br>" + labelcontent,
-                style: { "color": labelcolor, "text-align": "center", "background": "transparent","border":"0px" }
+                content: "<img class='img-circle' style='width:50px;height:50px;' src='" + "{{$uploadpath}}/pet/" + arr.pet_photo + "' />" ,
+                style: { "color": labelcolor, "text-align": "center", "background": "transparent", "border": "2px " + labelcolor + " solid","border-radius":"50px" }
             });
 
+            qq.maps.event.addDomListener(label, "click", function () {
+                
+                info.setContent('<div style="margin:10px;">'
+                    +"<h5><span style='color:" + labelcolor + "'>(紧急:" + labelRescueLevel + ")</span>" + labelRescueType + "的" + lblPetType + "</h5>"
+                    + "<p>描述："+arr.pet_detail+"</p>"
+                    + "<p>位置：" + arr.rescue_address + " " + arr.rescue_detail + "</p>"
+                    + (arr.contact_name == "" ? "" : "<p>联系人：" + arr.contact_name + "</p>")
+                    + (arr.contact_mobile == "" ? "" : "<p>联系电话：" + arr.contact_mobile + "</p>")
+                    + (arr.contact_wechat == "" ? "" : "<p>联系微信：" + arr.contact_wechat + "</p>")
+                    + (arr.contact_qq == "" ? "" : "<p>联系QQ：" + arr.contact_qq + "</p>")
+                    + "<p style='text-align:right;'><button class='btn btn-success' onclick='openPoster("+arr.id+");'>分享和救助</button></p>"
+                    +'</div>');
+                info.setPosition(new qq.maps.LatLng(arr.rescue_lat - 0.0006, Number(arr.rescue_lng) + 0.0006));
+                info.open();
+            });
 
             posterLabels[i] = label;
         }
@@ -219,9 +242,14 @@ scaleSize
             });
             //若服务请求失败，则运行以下函数
             geocoder.setError(function () {
-                //alert("出错了，请输入正确的经纬度！！！");
+                alert("获取地址失败，请重新尝试!");
             });
 
+        }
+        function openPoster(id) {
+            $("#showPoster").load("{{$rootpath}}/showposter.php?id=" + id, function () {
+                $("#showPoster").fadeIn();
+            });
         }
     </script>
 </body>
