@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
@@ -31,6 +31,8 @@
         var tmpLat = 0;
         var tmpLng = 0;
         var setPointForPoster = false;
+        var touchTimeout = null;
+        var geocoder = null;
         $(document).ready(function () {
             initCtxPoster();
             initMap();
@@ -40,7 +42,7 @@
                 document.getElementById("geoPage")
                         .contentWindow.postMessage('getLocation.robust', '*');
             }, 60000);
-
+            geocoder = new qq.maps.Geocoder();
         });
         function initMap() {
             map = new qq.maps.Map(document.getElementById("container"), {
@@ -54,14 +56,17 @@
             document.getElementById("container").addEventListener('touchstart', function (event) {
                 touchstart = new Date().getTime();
                 setPointForPoster = false;
-            }, true);
-            document.getElementById("container").addEventListener('touchend', function (event) {
-                var touchend = new Date().getTime();
-                if (touchend-touchstart >= 1000) {
+                touchTimeout = setTimeout(function () {
                     setPointForPoster = true;
                     $("#ctxPoster").load("{{$rootpath}}/poster.php", function () {
                         $("#ctxPoster").fadeIn();
                     });
+                }, 1000);
+            }, true);
+            document.getElementById("container").addEventListener('touchend', function (event) {
+                var touchend = new Date().getTime();
+                if (touchend-touchstart < 1000) {
+                    clearTimeout(touchTimeout);
                 }
             }, true);
 
@@ -104,7 +109,7 @@
                 if ($("#ctxPoster #rescue_address").length > 0) {
                     if (setPointForPoster) {
 
-                        $("#ctxPoster #rescue_address").val("地图中标识的点");
+                        setLatLngAddress(tmpLat, tmpLng, $("#ctxPoster #rescue_address"));
                         $("#ctxPoster #rescue_lat").val(tmpLat);
                         $("#ctxPoster #rescue_lng").val(tmpLng);
                     } else {
@@ -180,10 +185,10 @@ scaleSize
         function addPosterLabel(arr) {
             var labelcontent = "其他";
             switch (arr.rescue_type) {
-                case "W": label = "受伤"; break;
-                case "H": label = "饥饿"; break;
-                case "L": label = "走失"; break;
-                case "A": label = "待领养"; break;
+                case "W": labelcontent = "受伤"; break;
+                case "H": labelcontent = "饥饿"; break;
+                case "L": labelcontent = "走失"; break;
+                case "A": labelcontent = "待领养"; break;
             }
 
             var labelcolor = "black";
@@ -204,7 +209,20 @@ scaleSize
 
             posterLabels[i] = label;
         }
+        function setLatLngAddress(lat,lng,target) {
+            var latLng = new qq.maps.LatLng(lat, lng);
+            //对指定经纬度进行解析
+            geocoder.getAddress(latLng);
+            //设置服务请求成功的回调函数
+            geocoder.setComplete(function (result) {
+                target.val(result.detail.address);
+            });
+            //若服务请求失败，则运行以下函数
+            geocoder.setError(function () {
+                //alert("出错了，请输入正确的经纬度！！！");
+            });
 
+        }
     </script>
 </body>
 
