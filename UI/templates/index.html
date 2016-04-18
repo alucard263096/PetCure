@@ -14,7 +14,6 @@
     <div id="container"></div>
     <button class="btn btn-default" id="btnPost">发起救助</button>
     <div id="ctxPoster" ></div>
-    <div id="showPoster"></div>
     <div id="markset" class="hide"></div>
     <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="http://apis.map.qq.com/tools/geolocation?key=EBWBZ-CZN3K-4O5JK-A3WQF-5HOCS-HUB2O&referer={{$Title}}"></iframe>
 
@@ -221,7 +220,7 @@ scaleSize
                     + "<p>描述："+arr.pet_detail+"</p>"
                     + "<p>位置：" + arr.rescue_address + " " + arr.rescue_detail + "</p>"
                     + (arr.contact_name == "" ? "" : "<p>联系人：" + arr.contact_name + "</p>")
-                    + (arr.contact_mobile == "" ? "" : "<p>联系电话：" + arr.contact_mobile + "</p>")
+                    + (arr.contact_mobile == "" ? "" : "<p>联系电话：<a href=tel:" + arr.contact_mobile + "'>" + arr.contact_mobile + "</a></p>")
                     + (arr.contact_wechat == "" ? "" : "<p>联系微信：" + arr.contact_wechat + "</p>")
                     + (arr.contact_qq == "" ? "" : "<p>联系QQ：" + arr.contact_qq + "</p>")
                     + "<p style='text-align:right;'><button class='btn btn-success' onclick='openPoster("+arr.id+");'>分享和救助</button></p>"
@@ -247,8 +246,8 @@ scaleSize
 
         }
         function openPoster(id) {
-            $("#showPoster").load("{{$rootpath}}/showposter.php?id=" + id, function () {
-                $("#showPoster").fadeIn();
+            $("#ctxPoster").load("{{$rootpath}}/showposter.php?id=" + id, function (e) {
+                $("#ctxPoster").fadeIn();
             });
         }
     </script>

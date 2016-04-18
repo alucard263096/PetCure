@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `tb_poster_record`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tb_poster_record` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `poster_id` int(11) DEFAULT NULL,
   `pet_photo` varchar(255) DEFAULT NULL,
   `pet_detail` varchar(45) DEFAULT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE `tb_poster_record` (
   `rescue_lng` varchar(45) DEFAULT NULL,
   `created_date` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,4 +64,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-18 16:47:17
+-- Dump completed on 2016-04-18 17:35:31

@@ -85,6 +85,23 @@
 		return $return;
 	}
 
+	public function getPoster($id){
+		$sql="select * from tb_poster where id=$id  ";
+		$query = $this->dbmgr->query($sql);
+		$return = $this->dbmgr->fetch_array($query);
+
+		return $return;
+	}
+
+	public function getPosterRecord($id){
+		$sql="select * from tb_poster_record where poster_id=$id  ";
+		$query = $this->dbmgr->query($sql);
+		$return = $this->dbmgr->fetch_array_all($query);
+
+		return $return;
+	}
+
+
 	public  function __destruct ()
 	{
 		
