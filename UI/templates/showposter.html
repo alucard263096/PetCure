@@ -4,21 +4,200 @@
             &times;
         </button>
         <h4 class="modal-title" id="lblTitle">
-            {{if $poster.rescue_type=='W'}}受伤
-            {{elseif  $poster.rescue_type=='H'}}饥饿
-            {{elseif  $poster.rescue_type=='L'}}走失
-            {{elseif  $poster.rescue_type=='A'}}待领养
-            {{else}}等救助{{/if}}的{{if $poster.pet_type=='D'}}狗狗{{elseif $poster.pet_type=='C'}}猫猫{{else}}小可爱{{/if}}
+            {{if $poster.rescue_type=='W'}}受伤{{elseif  $poster.rescue_type=='H'}}饥饿{{elseif  $poster.rescue_type=='L'}}走失{{elseif  $poster.rescue_type=='A'}}待领养{{else}}等救助{{/if}}的{{if $poster.pet_type=='D'}}狗狗{{elseif $poster.pet_type=='C'}}猫猫{{else}}小可爱{{/if}}
+            {{if $poster.status=="C"}}已解救{{/if}}
         </h4>
     </div>
     <div class="modal-body" style="height: 140px; overflow: auto;  ">
         <div class="row">
-            <div class="col-md-6">发现者：{{if $record.0.contact_name==""}}无名氏{{else}}{{$record.0.contact_name}}{{/if}}</div>
-            <div class="col-md-6">发现时间：{{$poster.created_date}}</div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <img class="img-rounded img-responsive" src="{{$uploadpath}}/pet/{{$poster.pet_photo}}" />
+            <div class="col-xs-12" id="poster_detail">
+                {{foreach from=$record item=rs key=key}}
+                {{if $key=="0"}}
+                <div class="row">
+                    <div class="col-xs-6">发现者：{{if $rs.contact_name==""}}无名氏{{else}}{{$rs.contact_name}}{{/if}}</div>
+                    <div class="col-xs-6 text-right">时间：{{$rs.created_date}}</div>
+                </div>
+                {{else}}
+                <hr />
+                <div class="row">
+                    <div class="col-xs-6">第{{$key}}发现者：{{if $rs.contact_name==""}}无名氏{{else}}{{$rs.contact_name}}{{/if}}</div>
+                    <div class="col-xs-6 text-right">时间：{{$rs.created_date}}</div>
+                </div>
+                {{/if}}
+                <div class="row recorditem">
+                    <div class="col-xs-12">
+                        <div class="row h_pet_photo" style="padding-top:10px;" id="h_pet_photo_{{$rs.id}}">
+                            <div class="col-xs-12">
+                                <img class="img-rounded img-responsive" src="{{$uploadpath}}/pet/{{$rs.pet_photo}}" ref="{{$rs.id}}" />
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top:10px;">
+                            <div class="col-xs-5" id="p_pet_photo_{{$rs.id}}">
+                                <img class="img-rounded img-responsive" src="{{$uploadpath}}/pet/{{$rs.pet_photo}}" />
+                            </div>
+                            <div class="col-xs-7" id="p_pet_content_{{$rs.id}}">
+                                <div class="row">
+                                    <div class="col-xs-12" style="padding-left:0px;padding-right:0px;" id="p_pet_tt_{{$rs.id}}">
+                                        <p>
+                                            {{if $key==0}}
+                                            <b>{{if $poster.pet_type=='D'}}狗狗{{elseif $poster.pet_type=='C'}}猫猫{{else}}小可爱{{/if}}</b>
+                                            的体型是
+                                            <b>
+                                                {{if $rs.rs=='G'}}巨型
+                                                {{elseif  $rs.rs=='B'}}大型
+                                                {{elseif  $rs.rs=='M'}}中型
+                                                {{elseif  $rs.rs=='S'}}小型
+                                                {{elseif  $rs.rs=='W'}}微型
+                                                {{else}}大概不大不小{{/if}}
+                                            </b>
+                                            {{if $rs.pet_detail!=""}}
+                                            ，另外还是<b>{{$rs.pet_detail}}</b>。
+                                            {{else}}
+                                            。
+                                            {{/if}}
+                                            {{else}}
+                                            {{if $rs.pet_detail!=""}}
+                                            现在狗狗的样子已经<b>{{$rs.pet_detail}}</b>。
+                                            {{/if}}
+                                            {{/if}}
+                                        </p>
+                                        <p>
+                                            <b>{{if $poster.pet_type=='D'}}狗狗{{elseif $poster.pet_type=='C'}}猫猫{{else}}小可爱{{/if}}</b>已经是
+                                            <b>
+                                                {{if $rs.rescue_type=='W'}}受伤
+                                                {{elseif  $rs.rescue_type=='H'}}饥饿
+                                                {{elseif  $rs.rescue_type=='L'}}走失
+                                                {{elseif  $rs.rescue_type=='A'}}待领养                                                
+                                                {{elseif  $rs.rescue_type=='K'}}被救助了
+                                                {{else}}等救助{{/if}}
+                                            </b>的，情况{{if $rs.rescue_level=='C'}}<b style="color:red">非常严重</b>
+                                            {{elseif  $rs.rescue_level=='H'}}<b style="color:orange">很危险</b>
+                                            {{elseif  $rs.rescue_level=='M'}}<b style="color:blue">有点困难</b>
+                                            {{elseif  $rs.rescue_level=='L'}}<b style="color:green">也算还行</b>                                            
+                                            {{elseif  $rs.rescue_level=='N'}}<b style="color:green">没问题了</b>{{/if}}
+                                            {{if $rs.rescue_need!=""}}
+                                            ，它需要<b>{{$rs.rescue_need}}</b>。
+                                            {{else}}
+                                            。
+                                            {{/if}}位置在<b>{{$rs.rescue_address}}</b>
+                                            {{if $rs.rescue_detail!=""}}
+                                            ，具体就在<b>{{$rs.rescue_detail}}</b>。
+                                            {{else}}
+                                            。
+                                            {{/if}}
+                                        </p>
+                                        <p>
+                                            {{if $rs.contact_name!=""}}
+                                            我叫<b>{{$rs.contact_name}}</b>，
+                                            {{/if}}
+                                            {{if $rs.contact_mobile!=""}}
+                                            手机号码是<b>{{$rs.contact_mobile}}</b>，
+                                            {{/if}}
+                                            {{if $rs.contact_qq!=""}}
+                                            QQ是<b>{{$rs.contact_qq}}</b>，
+                                            {{/if}}
+                                            {{if $rs.contact_wechat!=""}}
+                                            微信是<b>{{$rs.contact_wechat}}</b>。
+                                            {{/if}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/foreach}}
+            </div>
+            <div class="col-xs-12 hide" id="addRecord">
+                <form class="form-horizontal" id="frompost" action="addrecord.php" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">上传图片 <span style="color:red;">*</span></label>
+                        <div class="col-lg-10">
+                            <input class="form-control  notnull" type="file" name="pet_photo" id="pet_photo" accept="image/jpeg,image/x-png">
+                        </div>
+                        <p class="col-lg-12 ">为了你的流量着想，请尽量把图片压缩或者在wifi下发布</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">最新状态</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" type="text" placeholder="更加简单的补充一下流浪宠的样子" name="pet_detail" id="pet_detail" maxlength="255">
+                        </div>
+                    </div><div class="form-group">
+                        <label class="col-lg-2 control-label">当前所需救助类型 <span style="color:red;">*</span></label>
+                        <div class="col-lg-10">
+                            <select class="form-control notnull" name="rescue_type" id="rescue_type">
+                                <option value="W" {{if $poster.rescue_type=="W" }}selected=selected{{/if}}>受伤</option>
+                                <option value="H" {{if $poster.rescue_type=="H" }}selected=selected{{/if}}>饥饿</option>
+                                <option value="L" {{if $poster.rescue_type=="L" }}selected=selected{{/if}}>走失</option>
+                                <option value="A" {{if $poster.rescue_type=="A" }}selected=selected{{/if}}>待领养</option>
+                                <option value="O" {{if $poster.rescue_type=="O" }}selected=selected{{/if}}>其它</option>
+                                <option value="O" {{if $poster.rescue_type=="K" }}selected=selected{{/if}}>我来解救</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">紧急程度</label>
+                        <div class="col-lg-10">
+                            <select class="form-control" name="rescue_level" id="rescue_level">
+                                <option value="C" {{if $poster.rescue_level=="C" }}selected=selected{{/if}}>严重</option>
+                                <option value="H" {{if $poster.rescue_level=="H" }}selected=selected{{/if}}>高</option>
+                                <option value="M" {{if $poster.rescue_level=="M" }}selected=selected{{/if}}>中</option>
+                                <option value="L" {{if $poster.rescue_level=="L" }}selected=selected{{/if}}>低</option>
+                                <option value="L" {{if $poster.rescue_level=="N" }}selected=selected{{/if}}>没问题</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">定点位置</label>
+                        <div class="col-lg-7">
+                            <input class="form-control notnull" type="text" name="rescue_address" id="rescue_address" maxlength="255">
+                        </div>
+                        <div class="col-lg-3">
+                            <button class="btn btn-default">获取定位</button>
+                        </div>
+                        <p class="col-lg-12 ">如果定位位置和救助位置不同，请打开地图长按正确位置，如果定位失败请重新尝试</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">具体地点补充</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" type="text" placeholder="补充下具体位置，例如墙角下之类的" name="rescue_detail" id="rescue_detail" maxlength="255">
+                        </div>
+                    </div>
+                    <input type="hidden" name="rescue_lat" id="rescue_lat" value="" />
+                    <input type="hidden" name="rescue_lng" id="rescue_lng" value="" />
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">所需救助</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" type="text" placeholder="当前这只流浪宠具体需要什么救助" name="rescue_need" id="rescue_need" maxlength="255">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">联系人姓名</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" type="text" placeholder="有需要时候可以找到你" name="contact_name" id="contact_name" maxlength="255">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">联系人电话</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" type="number" placeholder="有需要时候可以找到你" name="contact_mobile" id="contact_mobile" maxlength="11">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">QQ</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" type="number" placeholder="有需要时候可以找到你" name="contact_qq" id="contact_qq" maxlength="20">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">微信号</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" type="number" placeholder="有需要时候可以找到你" name="contact_wechat" id="contact_wechat" maxlength="20">
+                        </div>
+                    </div>
+                    <input type="hidden" name="verify" id="verify" value="{{$verify}}" />
+                    <input type="hidden" name="id" id="id" value="{{$poster.id}}" />
+                </form>
             </div>
         </div>
     </div>
@@ -26,26 +205,58 @@
         <button type="button" class="btn btn-default btnClose">
             关闭
         </button>
-        <button type="button" class="btn btn-default" disabled="disabled" id="btnPrevious">
-            上一步
+        <button type="button" class="btn btn-success" disabled="disabled" id="btnShare">
+            分享
         </button>
-        <button type="button" class="btn btn-primary" id="btnNext">
-            下一步
+        <button type="button" class="btn btn-primary" id="btnAddRecord">
+            救助它
         </button>
     </div>
 </div>
 <script>
     $(document).ready(function () {
         $("#ctxPoster .modal-body").css("height", $(window).height() - 125);
+        $(".recorditem .h_pet_photo img").each(function () {
+            var imgobj = $(this);
+            var id=imgobj.attr("ref");
+            imgobj.load(function () {
+                if (this.height * 1.0 / this.width > 0.75) {
+                    $("#h_pet_photo_" + id).hide();
+                } else {
+                    $("#p_pet_photo_" + id).hide();
+                    $("#p_pet_content_" + id).removeClass("col-xs-7").addClass("col-xs-12");
+                    $("#p_pet_tt_" + id).attr("style","");
+                }
+            });
+        });
         
         $("#ctxPoster .btnClose").click(function () {
             $("#ctxPoster").fadeOut();
         });
 
-        $("#ctxPoster #btnNext").click(function () {
-            
+        $("#ctxPoster #btnAddRecord").click(function () {
+            if ($("#addRecord").hasClass("hide")){
+                 $("#poster_detail").hide(); 
+                 $("#addRecord").removeClass("hide");
+             } else {
+
+                var allnotnull = false;
+                $("#addRecord .notnull").each(function () {
+                    if ($(this).val() == "") {
+                        $(this).parent().parent().addClass("has-error");
+                        allnotnull = true;
+                    } else {
+                        $(this).parent().parent().removeClass("has-error");
+                    }
+                });
+                if (allnotnull) {
+                    alert("请完成*号标记的必填项");
+                    return;
+                } 
+                $("#frompost").submit();
+            }
         });
-        $("#ctxPoster #btnPrevious").click(function () {
+        $("#ctxPoster #btnShare").click(function () {
             
         });
 

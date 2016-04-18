@@ -216,7 +216,7 @@ scaleSize
             qq.maps.event.addDomListener(label, "click", function () {
                 
                 info.setContent('<div style="margin:10px;">'
-                    +"<h5><span style='color:" + labelcolor + "'>(紧急:" + labelRescueLevel + ")</span>" + labelRescueType + "的" + lblPetType + "</h5>"
+                    +"<h5><span style='color:" + labelcolor + "'>(紧急:" + labelRescueLevel + ")</span>" + labelRescueType + "的" + lblPetType+arr.rescue_need + "</h5>"
                     + "<p>描述："+arr.pet_detail+"</p>"
                     + "<p>位置：" + arr.rescue_address + " " + arr.rescue_detail + "</p>"
                     + (arr.contact_name == "" ? "" : "<p>联系人：" + arr.contact_name + "</p>")

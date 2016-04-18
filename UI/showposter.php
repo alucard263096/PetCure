@@ -14,6 +14,8 @@
   
   $record=$posterMgr->getPosterRecord($_REQUEST["id"]+0);
   $smarty->assign("record",$record);
+  
+  $smarty->assign("verify",md5(time().$file["name"]));
 
   $smarty->display(ROOT.'/templates/showposter.html');
   

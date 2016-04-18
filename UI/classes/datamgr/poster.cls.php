@@ -71,14 +71,72 @@
 		$this->dbmgr->commit_trans();
 
 	}
+	
+	public function updatePoster($request){
+		
+		$this->dbmgr->begin_trans();
+		$id = parameter_filter($request["id"])+0;
+
+		$verify=parameter_filter($request["verify"]);
+		$pet_type=parameter_filter($request["pet_type"]);
+		$pet_size=parameter_filter($request["pet_size"]);
+		$pet_photo=parameter_filter($request["pet_photo"]);
+		$pet_detail=parameter_filter($request["pet_detail"]);
+		$rescue_type=parameter_filter($request["rescue_type"]);
+		$rescue_level=parameter_filter($request["rescue_level"]);
+		$rescue_address=parameter_filter($request["rescue_address"]);
+		$rescue_detail=parameter_filter($request["rescue_detail"]);
+		$rescue_need=parameter_filter($request["rescue_need"]);
+		$rescue_lat=parameter_filter($request["rescue_lat"]);
+		$rescue_lng=parameter_filter($request["rescue_lng"]);
+		$contact_name=parameter_filter($request["contact_name"]);
+		$contact_mobile=parameter_filter($request["contact_mobile"]);
+		$contact_qq=parameter_filter($request["contact_qq"]);
+		$contact_wechat=parameter_filter($request["contact_wechat"]);
+		
+			$status='A';
+		if($rescue_type=="K"){
+			$status='C';
+		}
+
+		$sql="update tb_poster set verify='$verify',status='$status',updated_date=now(),
+		pet_photo='$pet_photo',pet_detail='$pet_detail',
+		rescue_type='$rescue_type',rescue_level='$rescue_level',rescue_address='$rescue_address',rescue_detail='$rescue_detail',rescue_need='$rescue_need',rescue_lat='$rescue_lat',rescue_lng='$rescue_lng',
+		contact_name='$contact_name',contact_mobile='$contact_mobile',contact_qq='$contact_qq',contact_wechat='$contact_wechat'
+		where id=$id
+		 ";
+		$query = $this->dbmgr->query($sql);
+		 
+		$rid = $this->dbmgr->getNewId("tb_poster_record");
+		
+		$sql="insert into tb_poster_record (id,poster_id,created_date,
+		pet_photo,pet_detail,
+		rescue_type,rescue_level,rescue_address,rescue_detail,rescue_need,rescue_lat,rescue_lng,
+		contact_name,contact_mobile,contact_qq,contact_wechat) values
+		($rid,$id,now(),
+		'$pet_photo','$pet_detail',
+		'$rescue_type','$rescue_level','$rescue_address','$rescue_detail','$rescue_need','$rescue_lat','$rescue_lng',
+		'$contact_name','$contact_mobile','$contact_qq','$contact_wechat')
+		 ";
+		$query = $this->dbmgr->query($sql);
+
+
+
+		$this->dbmgr->commit_trans();
+
+	}
+
+
+
 
 	public function getPosterList($lat,$lng){
 
 		$sql="select *,abs((rescue_lat-$lat)*(rescue_lat-$lat)+(rescue_lng-$lng)*(rescue_lng-$lng)) distance
  from tb_poster
-		where DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='A'
+		where  status='A' 
 		order by distance
 		limit 0,100  ";
+		//--or (DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='C')
 		$query = $this->dbmgr->query($sql);
 		$return = $this->dbmgr->fetch_array_all($query);
 
