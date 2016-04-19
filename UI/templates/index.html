@@ -101,9 +101,9 @@
         function initCtxPoster() {
             $("#ctxPoster").hide();
             $("#btnPost").click(function () {
-                //$("#ctxPoster").load("{{$rootpath}}/poster.php", function () {
-                //    $("#ctxPoster").fadeIn();
-                //});
+                $("#ctxPoster").load("{{$rootpath}}/poster.php", function () {
+                    $("#ctxPoster").fadeIn();
+                });
             });
         }
         function visabledControls(isVisable) {
