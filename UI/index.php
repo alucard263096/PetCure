@@ -8,8 +8,10 @@
   require 'include/common.inc.php';
   include ROOT.'/include/init.inc.php';
   
+  include ROOT.'/classes/mgr/wechat.cls.php';
+  $signPackage = $WechatMgr->GetSignPackage();
 
-  
+  $smarty->assign("wechatsign",$signPackage);
   
   $smarty->display(ROOT.'/templates/index.html');
   

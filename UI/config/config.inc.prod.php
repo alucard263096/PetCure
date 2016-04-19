@@ -49,4 +49,9 @@ $CONFIG['fileupload']['try_interval']		= "1";//second
 #[Tencent]
 $CONFIG['Tencent']["MapKey"]="EBWBZ-CZN3K-4O5JK-A3WQF-5HOCS-HUB2O";
 
+
+#[Wechat]
+$CONFIG['Wechat']["AppId"]="wxed38866af330cfd8";
+$CONFIG['Wechat']["AppSecret"]="31d0b2c9740ddd3c838f19b42de80887";
+
 ?>

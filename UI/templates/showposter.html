@@ -155,7 +155,7 @@
                         <div class="col-lg-3">
                             <a id="btnLocation" class="btn btn-default btn-sm">获取定位</a>
                         </div>
-                        <p class="col-lg-12 ">如果定位位置和救助位置不同，请打开地图长按正确位置，如果定位失败请重新尝试</p>
+                        <p class="col-lg-12 ">点击获取定位在地图上选择现在的位置</p>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-2 control-label">具体地点补充</label>
@@ -205,7 +205,7 @@
         <button type="button" class="btn btn-default btnClose">
             关闭
         </button>
-        <button type="button" class="btn btn-success" disabled="disabled" id="btnShare">
+        <button type="button" class="btn btn-success"  id="btnShare">
             分享
         </button>
         <button type="button" class="btn btn-primary" id="btnAddRecord">
@@ -257,7 +257,14 @@
             }
         });
         $("#ctxPoster #btnShare").click(function () {
-            
+            var news = new Array();
+            news.title = "请救救这只{{if $poster.rescue_type=='W'}}受伤{{elseif  $poster.rescue_type=='H'}}饥饿{{elseif  $poster.rescue_type=='L'}}走失{{elseif  $poster.rescue_type=='A'}}待领养{{else}}等救助{{/if}}"
+                + "的{{if $poster.pet_type=='D'}}狗狗{{elseif $poster.pet_type=='C'}}猫猫{{else}}小可爱{{/if}}";
+            news.desc = "情况{{if $poster.rescue_level=='C'}}非常严重{{elseif  $poster.rescue_level=='H'}}很危险{{elseif  $poster.rescue_level=='M'}}有点困难{{elseif  $poster.rescue_level=='L'}}也算还行{{elseif  $poster.rescue_level=='N'}}没问题了{{/if}} " 
+            + "{{if $poster.rescue_need!=""}}它需要{{$poster.rescue_need}}{{/if}} 位置在{{$poster.rescue_address}}{{$poster.rescue_detail}}";
+            news.link = "{{$Url}}/showposter.php?mode=full&id={{$poster.id}}";
+            news.imgUrl = "{{$Url}}/{{$uploadpath}}/pet/{{$poster.pet_photo}}";
+            shareNews(news);
         });
         $("#btnLocation").click(function () {
             gettingLocationInShowposter = true;

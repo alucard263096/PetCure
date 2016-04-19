@@ -277,7 +277,6 @@ scaleSize
             geocoder.setError(function () {
                 alert("获取地址失败，请重新尝试!");
             });
-
         }
         function openPoster(id) {
             $("#ctxPoster").load("{{$rootpath}}/showposter.php?id=" + id, function (e) {
@@ -285,6 +284,7 @@ scaleSize
             });
         }
     </script>
+    {{include  file="$smarty_root/share.html" }}
 </body>
 
 

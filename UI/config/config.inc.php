@@ -3,7 +3,7 @@
 #[Root]
 $CONFIG['rootpath']		= '/PetCure/UI';  
 //$CONFIG['charset']		= 'utf-8'; 
-$CONFIG['URL']="http://localhost/PetCure/UI";
+$CONFIG['URL']="http://www.myhkdoc.com/PetCure/UI";
 $CONFIG["SessionName"]="PetCure";
 $CONFIG["Title"]="宠物救助站";
 
@@ -27,7 +27,7 @@ $CONFIG['error_handler'] ="E_ALL";
 
 #[Database]
 $CONFIG['database']['provider']	= 'mysql';  //mssql,sqlsrv
-$CONFIG['database']['host']		= 'www.myhkdoc.com';  
+$CONFIG['database']['host']		= 'localhost';  
 $CONFIG['database']['database']	= 'cw_petcure';  
 $CONFIG['database']['user']		= 'root';  
 $CONFIG['database']['psw']		= 'root'; 
@@ -46,6 +46,10 @@ $CONFIG['fileupload']['try_interval']		= "1";//second
 
 #[Tencent]
 $CONFIG['Tencent']["MapKey"]="EBWBZ-CZN3K-4O5JK-A3WQF-5HOCS-HUB2O";
+
+#[Wechat]
+$CONFIG['Wechat']["AppId"]="wxed38866af330cfd8";
+$CONFIG['Wechat']["AppSecret"]="31d0b2c9740ddd3c838f19b42de80887";
 
 
 ?>
