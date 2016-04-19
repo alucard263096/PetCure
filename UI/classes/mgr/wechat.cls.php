@@ -71,6 +71,7 @@ class WechatMgr {
 
   public function getUserBaseInfo($openid){
 	
+	print_r($_REQUEST);
 	$userToken = $this->getUserToken();
 	echo "=======User Token<br />";
 	echo $userToken;
