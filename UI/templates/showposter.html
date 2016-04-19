@@ -205,9 +205,6 @@
         <button type="button" class="btn btn-default btnClose">
             关闭
         </button>
-        <button type="button" class="btn btn-success"  id="btnShare">
-            分享
-        </button>
         <button type="button" class="btn btn-primary" id="btnAddRecord">
             救助它
         </button>
@@ -232,6 +229,12 @@
         
         $("#ctxPoster .btnClose").click(function () {
             $("#ctxPoster").fadeOut();
+            var news = new Array();
+            news.title = "宠爱流浪宠物救助";
+            news.desc = "快速找到并分享附近需要帮助的流浪宠物";
+            news.link = "{{$Url}}{{$rootpath}}/index.php";
+            news.imgUrl = "分享链接D";
+            shareNews(news);
         });
 
         $("#ctxPoster #btnAddRecord").click(function () {
@@ -256,7 +259,7 @@
                 $("#frompost").submit();
             }
         });
-        $("#ctxPoster #btnShare").click(function () {
+
             var news = new Array();
             news.title = "请救救这只{{if $poster.rescue_type=='W'}}受伤{{elseif  $poster.rescue_type=='H'}}饥饿{{elseif  $poster.rescue_type=='L'}}走失{{elseif  $poster.rescue_type=='A'}}待领养{{else}}等救助{{/if}}"
                 + "的{{if $poster.pet_type=='D'}}狗狗{{elseif $poster.pet_type=='C'}}猫猫{{else}}小可爱{{/if}}";
@@ -265,7 +268,7 @@
             news.link = "{{$Url}}{{$rootpath}}/showposter.php?mode=full&id={{$poster.id}}";
             news.imgUrl = "{{$Url}}{{$uploadpath}}/pet/{{$poster.pet_photo}}";
             shareNews(news);
-        });
+
         $("#btnLocation").click(function () {
             gettingLocationInShowposter = true;
             $("#ctxPoster").fadeOut();
