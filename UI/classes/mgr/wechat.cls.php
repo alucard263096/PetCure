@@ -29,7 +29,9 @@ class WechatMgr {
       "timestamp" => $timestamp,
       "url"       => $url,
       "signature" => $signature,
-      "rawString" => $string
+      "rawString" => $string,
+	  "jsapi_ticket"=>$jsapiTicket,
+	  "url"=>$url
     );
     return $signPackage; 
   }

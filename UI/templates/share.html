@@ -7,6 +7,8 @@
         timestamp: "{{$wechatsign.timestamp}}",
         nonceStr: '{{$wechatsign.nonceStr}}',
         signature: '{{$wechatsign.signature}}',
+        jsapi_ticket: '{{$wechatsign.jsapi_ticket}}',
+        url: '{{$wechatsign.url}}',
     jsApiList: [
         // 所有要调用的 API 都要加到这个列表中
         'checkJsApi',
@@ -63,6 +65,15 @@
     });
     function shareNews(news) {
         wx.onMenuShareAppMessage(news);
-        //wx.onMenuShareTimeline(news);
+        wx.onMenuShareTimeline(news);
+        //wx.checkJsApi({
+        //    jsApiList: [
+        //      'getNetworkType',
+        //      'previewImage'
+        //    ],
+        //    success: function (res) {
+        //        alert(JSON.stringify(res));
+        //    }
+        //});
     }
     </script>
