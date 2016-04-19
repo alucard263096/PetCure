@@ -85,7 +85,7 @@ class WechatMgr {
   }
 
   public function getUserToken(){
-	$oauth2_code = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->appId."&secret=".$this->appSecret."&code=code&grant_type=authorization_code";
+	$oauth2_code = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->appId."&secret=".$this->appSecret."&code="+$_REQUEST["code"]+"&grant_type=authorization_code";
 	$res = json_decode($this->httpGet($oauth2_code));
 	return $res;
   }
