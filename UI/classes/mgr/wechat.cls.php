@@ -69,7 +69,7 @@ class WechatMgr {
     return $ticket;
   }
 
-  public function getUserBaseInfo($openid){
+  public function getUserBaseInfo(){
 	
 	print_r($_REQUEST);
 	$userToken = $this->getUserToken();
@@ -79,9 +79,11 @@ class WechatMgr {
 	
 	echo "=======End User Token<br />";
 
-    echo $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$userToken["access_token"]."&openid=".$userToken["openid"]."&lang=zh_CN";
+    echo $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$userToken->access_token."&openid=".$userToken->openid."&lang=zh_CN";
 	echo "<br />";
-    $res = json_decode($this->httpGet($url));
+	$urlcontent=$this->httpGet($url);
+	//echo $urlcontent;
+    $res = json_decode($urlcontent);
 	return $res;
   }
 
