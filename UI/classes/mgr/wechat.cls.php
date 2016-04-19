@@ -78,8 +78,8 @@ class WechatMgr {
 	print_r($userToken);
 	
 	echo "=======End User Token<br />";
-
-    echo $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$userToken->access_token."&openid=".$userToken->openid."&lang=zh_CN";
+	$accessToken = $this->getAccessToken();
+    echo $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$accessToken."&openid=".$userToken->openid."&lang=zh_CN";
 	echo "<br />";
 	$urlcontent=$this->httpGet($url);
 	//echo $urlcontent;
