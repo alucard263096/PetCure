@@ -69,6 +69,27 @@ class WechatMgr {
     return $ticket;
   }
 
+  public function getUserBaseInfo($openid){
+	
+	$userToken = $this->getUserToken();
+	echo "=======User Token<br />";
+	echo $userToken;
+	print_r($userToken);
+	
+	echo "=======End User Token<br />";
+
+	$accessToken = $this->getAccessToken();
+    $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$accessToken&openid="+$userToken["openid"]+"&lang=zh_CN";
+    $res = json_decode($this->httpGet($url));
+	return $res;
+  }
+
+  public function getUserToken(){
+	$oauth2_code = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->appId."&secret=".$this->appSecret."&code=code&grant_type=authorization_code";
+	$res = json_decode($this->httpGet($oauth2_code));
+	return $res;
+  }
+
   private function getAccessToken() {
     // access_token 应该全局存储与更新，以下代码以写入到文件中做示例
     $data = json_decode(file_get_contents("access_token.json"));
