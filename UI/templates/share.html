@@ -79,12 +79,16 @@
             alert("请使用微信打开");
         } else {
             alert("aa");
-            WeixinJSBridge.invoke('shareTimeline', {
-                "title": news.title,
-                "link": news.link,
-                "desc": news.desc,
-                "img_url": news.imgUrl
-            });
+            try{
+                WeixinJSBridge.invoke('shareTimeline', {
+                    "title": news.title,
+                    "link": news.link,
+                    "desc": news.desc,
+                    "img_url": news.imgUrl
+                });
+            } catch (e) {
+                alert(e.message);
+            }
         }
     }
     </script>
