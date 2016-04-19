@@ -70,26 +70,28 @@ class WechatMgr {
   }
 
   public function getUserBaseInfo(){
-	
-	print_r($_REQUEST);
-	$userToken = $this->getUserToken();
-	echo "=======User Token<br />";
-	echo $userToken;
-	print_r($userToken);
-	
-	echo "=======End User Token<br />";
-	$accessToken = $this->getAccessToken();
-    echo $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$userToken->access_token."&openid=".$userToken->openid."&lang=zh_CN";
-	echo "<br />";
-	$urlcontent=$this->httpGet($url);
-	//echo $urlcontent;
-    $res = json_decode($urlcontent);
+	Global $CONFIG;
+
+	if($_REQUEST["code"]!=""){
+		if($_SESSION[$CONFIG["SessionName"]]["USER"]!=""){
+			$res=$_SESSION[$CONFIG["SessionName"]]["USER"];
+		}else{
+			$userToken = $this->getUserToken();
+			$accessToken = $this->getAccessToken();
+			$url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$accessToken."&openid=".$userToken->openid."&lang=zh_CN";
+			$urlcontent=$this->httpGet($url);
+			//echo $urlcontent;
+			$res = json_decode($urlcontent,true);
+			if($res["errcode"]==""){
+				$_SESSION[$CONFIG["SessionName"]]["USER"]=$res;
+			}
+		}
+	}
 	return $res;
   }
 
   public function getUserToken(){
-	echo $oauth2_code = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->appId."&secret=".$this->appSecret."&code=".$_REQUEST["code"]."&grant_type=authorization_code";
-	echo "<br />";
+	$oauth2_code = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->appId."&secret=".$this->appSecret."&code=".$_REQUEST["code"]."&grant_type=authorization_code";
 	$res = json_decode($this->httpGet($oauth2_code));
 	return $res;
   }
