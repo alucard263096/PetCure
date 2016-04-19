@@ -262,9 +262,8 @@
                 + "的{{if $poster.pet_type=='D'}}狗狗{{elseif $poster.pet_type=='C'}}猫猫{{else}}小可爱{{/if}}";
             news.desc = "情况{{if $poster.rescue_level=='C'}}非常严重{{elseif  $poster.rescue_level=='H'}}很危险{{elseif  $poster.rescue_level=='M'}}有点困难{{elseif  $poster.rescue_level=='L'}}也算还行{{elseif  $poster.rescue_level=='N'}}没问题了{{/if}} " 
             + "{{if $poster.rescue_need!=""}}它需要{{$poster.rescue_need}}{{/if}} 位置在{{$poster.rescue_address}}{{$poster.rescue_detail}}";
-            news.link = "{{$Url}}/showposter.php?mode=full&id={{$poster.id}}";
-            news.imgUrl = "{{$Url}}/{{$uploadpath}}/pet/{{$poster.pet_photo}}";
-            alert(news.imgUrl);
+            news.link = "{{$Url}}{{$rootpath}}/showposter.php?mode=full&id={{$poster.id}}";
+            news.imgUrl = "{{$Url}}{{$uploadpath}}/pet/{{$poster.pet_photo}}";
             shareNews(news);
         });
         $("#btnLocation").click(function () {
