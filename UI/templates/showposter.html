@@ -264,6 +264,7 @@
             + "{{if $poster.rescue_need!=""}}它需要{{$poster.rescue_need}}{{/if}} 位置在{{$poster.rescue_address}}{{$poster.rescue_detail}}";
             news.link = "{{$Url}}/showposter.php?mode=full&id={{$poster.id}}";
             news.imgUrl = "{{$Url}}/{{$uploadpath}}/pet/{{$poster.pet_photo}}";
+            alert(news.imgUrl);
             shareNews(news);
         });
         $("#btnLocation").click(function () {
