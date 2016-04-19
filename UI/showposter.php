@@ -17,6 +17,16 @@
   
   $smarty->assign("verify",md5(time().$file["name"]));
 
-  $smarty->display(ROOT.'/templates/showposter.html');
+  if($_REQUEST["mode"]=="full"){
+
+	  include ROOT.'/classes/mgr/wechat.cls.php';
+	  $signPackage = $WechatMgr->GetSignPackage();
+	  $smarty->assign("wechatsign",$signPackage);
+	  $smarty->display(ROOT.'/templates/fullshowposter.html');
+
+  }else{
+	$smarty->display(ROOT.'/templates/showposter.html');
+  }
+
   
 ?>

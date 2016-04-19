@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>{{$Title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!-- Bootstrap -->
+    <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" media="screen" href="{{$rootpath}}/css/style.css">
+</head>
+<body style="margin:10px;">
+    <div class="row">
+        <div class="col-xs-12">
+            <h4 class="modal-title" id="lblTitle">
+                {{if $poster.rescue_type=='W'}}受伤{{elseif  $poster.rescue_type=='H'}}饥饿{{elseif  $poster.rescue_type=='L'}}走失{{elseif  $poster.rescue_type=='A'}}待领养{{else}}等救助{{/if}}的{{if $poster.pet_type=='D'}}狗狗{{elseif $poster.pet_type=='C'}}猫猫{{else}}小可爱{{/if}}
+                {{if $poster.status=="C"}}已解救{{/if}}
+            </h4>
+        </div>
+        <hr />
+    </div>
+    <div class="row">
+        <div class="col-xs-12" id="poster_detail">
+            {{foreach from=$record item=rs key=key}}
+            {{if $key=="0"}}
+            <div class="row">
+                <div class="col-xs-6">发现者：{{if $rs.contact_name==""}}无名氏{{else}}{{$rs.contact_name}}{{/if}}</div>
+                <div class="col-xs-6 text-right">时间：{{$rs.created_date}}</div>
+            </div>
+            {{else}}
+            <hr />
+            <div class="row">
+                <div class="col-xs-6">第{{$key}}发现者：{{if $rs.contact_name==""}}无名氏{{else}}{{$rs.contact_name}}{{/if}}</div>
+                <div class="col-xs-6 text-right">时间：{{$rs.created_date}}</div>
+            </div>
+            {{/if}}
+            <div class="row recorditem">
+                <div class="col-xs-12">
+                    <div class="row h_pet_photo" style="padding-top:10px;" id="h_pet_photo_{{$rs.id}}">
+                        <div class="col-xs-12">
+                            <img class="img-rounded img-responsive" src="{{$uploadpath}}/pet/{{$rs.pet_photo}}" ref="{{$rs.id}}" />
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top:10px;">
+                        <div class="col-xs-5" id="p_pet_photo_{{$rs.id}}">
+                            <img class="img-rounded img-responsive" src="{{$uploadpath}}/pet/{{$rs.pet_photo}}" />
+                        </div>
+                        <div class="col-xs-7" id="p_pet_content_{{$rs.id}}">
+                            <div class="row">
+                                <div class="col-xs-12" style="padding-left:0px;padding-right:0px;" id="p_pet_tt_{{$rs.id}}">
+                                    <p>
+                                        {{if $key==0}}
+                                        <b>{{if $poster.pet_type=='D'}}狗狗{{elseif $poster.pet_type=='C'}}猫猫{{else}}小可爱{{/if}}</b>
+                                        的体型是
+                                        <b>
+                                            {{if $rs.rs=='G'}}巨型
+                                            {{elseif  $rs.rs=='B'}}大型
+                                            {{elseif  $rs.rs=='M'}}中型
+                                            {{elseif  $rs.rs=='S'}}小型
+                                            {{elseif  $rs.rs=='W'}}微型
+                                            {{else}}大概不大不小{{/if}}
+                                        </b>
+                                        {{if $rs.pet_detail!=""}}
+                                        ，另外还是<b>{{$rs.pet_detail}}</b>。
+                                        {{else}}
+                                        。
+                                        {{/if}}
+                                        {{else}}
+                                        {{if $rs.pet_detail!=""}}
+                                        现在狗狗的样子已经<b>{{$rs.pet_detail}}</b>。
+                                        {{/if}}
+                                        {{/if}}
+                                    </p>
+                                    <p>
+                                        <b>{{if $poster.pet_type=='D'}}狗狗{{elseif $poster.pet_type=='C'}}猫猫{{else}}小可爱{{/if}}</b>已经是
+                                        <b>
+                                            {{if $rs.rescue_type=='W'}}受伤
+                                            {{elseif  $rs.rescue_type=='H'}}饥饿
+                                            {{elseif  $rs.rescue_type=='L'}}走失
+                                            {{elseif  $rs.rescue_type=='A'}}待领养
+                                            {{elseif  $rs.rescue_type=='K'}}被救助了
+                                            {{else}}等救助{{/if}}
+                                        </b>的，情况{{if $rs.rescue_level=='C'}}<b style="color:red">非常严重</b>
+                                        {{elseif  $rs.rescue_level=='H'}}<b style="color:orange">很危险</b>
+                                        {{elseif  $rs.rescue_level=='M'}}<b style="color:blue">有点困难</b>
+                                        {{elseif  $rs.rescue_level=='L'}}<b style="color:green">也算还行</b>
+                                        {{elseif  $rs.rescue_level=='N'}}<b style="color:green">没问题了</b>{{/if}}
+                                        {{if $rs.rescue_need!=""}}
+                                        ，它需要<b>{{$rs.rescue_need}}</b>。
+                                        {{else}}
+                                        。
+                                        {{/if}}位置在<b>{{$rs.rescue_address}}</b>
+                                        {{if $rs.rescue_detail!=""}}
+                                        ，具体就在<b>{{$rs.rescue_detail}}</b>。
+                                        {{else}}
+                                        。
+                                        {{/if}}
+                                    </p>
+                                    <p>
+                                        {{if $rs.contact_name!=""}}
+                                        我叫<b>{{$rs.contact_name}}</b>，
+                                        {{/if}}
+                                        {{if $rs.contact_mobile!=""}}
+                                        手机号码是<b>{{$rs.contact_mobile}}</b>，
+                                        {{/if}}
+                                        {{if $rs.contact_qq!=""}}
+                                        QQ是<b>{{$rs.contact_qq}}</b>，
+                                        {{/if}}
+                                        {{if $rs.contact_wechat!=""}}
+                                        微信是<b>{{$rs.contact_wechat}}</b>。
+                                        {{/if}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/foreach}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-8 col-xs-pull-2 text-center">
+            <img class="img-responsive img-rounded" src="https://mp.weixin.qq.com/misc/getqrcode?fakeid=3218290369&token=1951158064&style=1" />
+            <p >长按二维码添加公众号</p>
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".recorditem .h_pet_photo img").each(function () {
+                var imgobj = $(this);
+                var id=imgobj.attr("ref");
+                imgobj.load(function () {
+                    if (this.height * 1.0 / this.width > 0.75) {
+                        $("#h_pet_photo_" + id).hide();
+                    } else {
+                        $("#p_pet_photo_" + id).hide();
+                        $("#p_pet_content_" + id).removeClass("col-xs-7").addClass("col-xs-12");
+                        $("#p_pet_tt_" + id).attr("style","");
+                    }
+                });
+            });
+
+            $("#btnShare").click(function () {
+                var news = new Array();
+                news.title = "请救救这只{{if $poster.rescue_type=='W'}}受伤{{elseif  $poster.rescue_type=='H'}}饥饿{{elseif  $poster.rescue_type=='L'}}走失{{elseif  $poster.rescue_type=='A'}}待领养{{else}}等救助{{/if}}"
+                    + "的{{if $poster.pet_type=='D'}}狗狗{{elseif $poster.pet_type=='C'}}猫猫{{else}}小可爱{{/if}}";
+                news.desc = "情况{{if $poster.rescue_level=='C'}}非常严重{{elseif  $poster.rescue_level=='H'}}很危险{{elseif  $poster.rescue_level=='M'}}有点困难{{elseif  $poster.rescue_level=='L'}}也算还行{{elseif  $poster.rescue_level=='N'}}没问题了{{/if}} "
+                + "{{if $poster.rescue_need!=""}}它需要{{$poster.rescue_need}}{{/if}} 位置在{{$poster.rescue_address}}{{$poster.rescue_detail}}";
+                news.link = "{{$Url}}/showposter.php?mode=full&id={{$poster.id}}";
+                news.imgUrl = "{{$Url}}/{{$uploadpath}}/pet/{{$poster.pet_photo}}";
+                shareNews(news);
+            });
+        });
+    </script>
+    {{include  file="$smarty_root/share.html" }}

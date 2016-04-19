@@ -75,20 +75,5 @@
         //        alert(JSON.stringify(res));
         //    }
         //});
-        if (typeof WeixinJSBridge == "undefined") {
-            alert("请使用微信打开");
-        } else {
-            alert("aa");
-            try{
-                WeixinJSBridge.invoke('shareTimeline', {
-                    "title": news.title,
-                    "link": news.link,
-                    "desc": news.desc,
-                    "img_url": news.imgUrl
-                });
-            } catch (e) {
-                alert(e.message);
-            }
-        }
     }
     </script>
