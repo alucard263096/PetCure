@@ -42,7 +42,8 @@
         var touchTimeout = null;
         var geocoder = null;
         var gettingLocationInShowposter=false;
-        var info=null;
+        var info = null;
+        var headimage = "{{$userinfo.headimgurl}}";
         $(document).ready(function () {
             initCtxPoster();
             initMap();
@@ -136,13 +137,25 @@
                 
                 map.setCenter(center);
                 if (myMark == null) {
+                    
+                    if (headimage == "") {
+                        myMark = new qq.maps.Marker({
+                            //设置Marker的位置坐标
+                            position: center,
+                            //设置显示Marker的地图
+                            map: map
+                        });
+                    } else {
 
-                    myMark = new qq.maps.Marker({
-                        //设置Marker的位置坐标
-                        position: center,
-                        //设置显示Marker的地图
-                        map: map
-                    });
+                        myMark = new qq.maps.Label({
+                            position: center,
+                            map: map,
+                            content: "<img class='img-circle' style='width:50px;height:50px;' src='" + "'" + headimage + "' />",
+                            style: { "color": labelcolor, "text-align": "center", "background": "transparent", "border": "0px" }
+                        });
+
+                    }
+
 
                 } else {
                     myMark.setPosition(center);

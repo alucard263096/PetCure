@@ -10,8 +10,10 @@
   
   include ROOT.'/classes/mgr/wechat.cls.php';
   $signPackage = $WechatMgr->GetSignPackage();
+  $userInfo = $WechatMgr->getUserBaseInfo("alucard263096");
 
   $smarty->assign("wechatsign",$signPackage);
+  $smarty->assign("userinfo",$userInfo);
   
   $smarty->display(ROOT.'/templates/index.html');
   
