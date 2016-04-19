@@ -64,7 +64,7 @@
         //alert("错误了？" + res.errMsg);
     });
     function shareNews(news) {
-        wx.onMenuShareAppMessage(news);
+        //wx.onMenuShareAppMessage(news);
         wx.onMenuShareTimeline(news);
         //wx.checkJsApi({
         //    jsApiList: [
@@ -75,5 +75,15 @@
         //        alert(JSON.stringify(res));
         //    }
         //});
+        if (typeof WeixinJSBridge == "undefined") {
+            alert("请使用微信打开");
+        } else {
+            WeixinJSBridge.invoke('shareTimeline', {
+                "title": news.title,
+                "link": news.link,
+                "desc": news.desc,
+                "img_url": news.imgUrl
+            });
+        }
     }
     </script>
