@@ -78,6 +78,7 @@
         if (typeof WeixinJSBridge == "undefined") {
             alert("请使用微信打开");
         } else {
+            alert(aa);
             WeixinJSBridge.invoke('shareTimeline', {
                 "title": news.title,
                 "link": news.link,
