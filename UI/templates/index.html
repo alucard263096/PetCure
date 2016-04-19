@@ -32,6 +32,8 @@
         var setPointForPoster = false;
         var touchTimeout = null;
         var geocoder = null;
+        var gettingLocationInShowposter=false;
+        var info=null;
         $(document).ready(function () {
             initCtxPoster();
             initMap();
@@ -51,8 +53,20 @@
             qq.maps.event.addListener(map, 'click', function (e) {
                 tmpLat = e.latLng.getLat();
                 tmpLng = e.latLng.getLng();
+                if (gettingLocationInShowposter == true) {
+                    $("#ctxPoster").fadeIn();
+                    gettingLocationInShowposter = false;
+                    setLatLngAddress(tmpLat, tmpLng, $("#ctxPoster #rescue_address_no"));
+                    $("#ctxPoster #rescue_lat_no").val(tmpLat);
+                    $("#ctxPoster #rescue_lng_no").val(tmpLng);
+
+                    visabledControls(true);
+                }
             });
             document.getElementById("container").addEventListener('touchstart', function (event) {
+                if (gettingLocationInShowposter == true) {
+                    return;
+                }
                 touchstart = new Date().getTime();
                 setPointForPoster = false;
                 touchTimeout = setTimeout(function () {
@@ -63,6 +77,9 @@
                 }, 2000);
             }, true);
             document.getElementById("container").addEventListener('touchend', function (event) {
+                if (gettingLocationInShowposter == true) {
+                    return;
+                }
                 var touchend = new Date().getTime();
                 if (touchend-touchstart < 2000) {
                     clearTimeout(touchTimeout);
@@ -76,7 +93,9 @@
             window.addEventListener('message', function (event) {
                 // 接收位置信息
                 loc = event.data;
-                markLocation();
+                if (gettingLocationInShowposter == false) {
+                    markLocation();
+                }
             }, false);
         }
         function initCtxPoster() {
@@ -86,6 +105,21 @@
                     $("#ctxPoster").fadeIn();
                 });
             });
+        }
+        function visabledControls(isVisable) {
+            if (isVisable) {
+
+                for (i = 0; i < posterLabels.length; i++) {
+                    posterLabels[i].setVisible(isVisable);
+                }
+                $("#btnPost").show();
+            } else {
+                info.close();
+                for (i = 0; i < posterLabels.length; i++) {
+                    posterLabels[i].setVisible(isVisable);
+                }
+                $("#btnPost").hide();
+            }
         }
         function markLocation() {
             if (loc && loc.module == 'geolocation') { //定位成功,防止其他应用也会向该页面post信息，需判断module是否为'geolocation'
@@ -209,8 +243,8 @@ scaleSize
             var label = new qq.maps.Label({
                 position: new qq.maps.LatLng(arr.rescue_lat, arr.rescue_lng),
                 map: map,
-                content: "<img class='img-circle' style='width:50px;height:50px;' src='" + "{{$uploadpath}}/pet/" + arr.pet_photo + "' />" ,
-                style: { "color": labelcolor, "text-align": "center", "background": "transparent", "border": "2px " + labelcolor + " solid","border-radius":"50px" }
+                content: "<img class='img-circle' style='width:50px;height:50px;border:2px solid " + labelcolor + ";border-radius:50px' src='" + "{{$uploadpath}}/pet/" + arr.pet_photo + "' />",
+                style: { "color": labelcolor, "text-align": "center", "background": "transparent" }
             });
 
             qq.maps.event.addDomListener(label, "click", function () {
