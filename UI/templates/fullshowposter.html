@@ -130,6 +130,7 @@
 
 <script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    {{include  file="$smarty_root/share.html" }}
     <script>
         $(document).ready(function () {
             $(".recorditem .h_pet_photo img").each(function () {
@@ -144,9 +145,10 @@
                         $("#p_pet_tt_" + id).attr("style","");
                     }
                 });
+                alert(1);
             });
 
-            $("#btnShare").click(function () {
+            
                 var news = new Array();
                 news.title = "请救救这只{{if $poster.rescue_type=='W'}}受伤{{elseif  $poster.rescue_type=='H'}}饥饿{{elseif  $poster.rescue_type=='L'}}走失{{elseif  $poster.rescue_type=='A'}}待领养{{else}}等救助{{/if}}"
                     + "的{{if $poster.pet_type=='D'}}狗狗{{elseif $poster.pet_type=='C'}}猫猫{{else}}小可爱{{/if}}";
@@ -155,7 +157,5 @@
                 news.link = "{{$Url}}/showposter.php?mode=full&id={{$poster.id}}";
                 news.imgUrl = "{{$Url}}/{{$uploadpath}}/pet/{{$poster.pet_photo}}";
                 shareNews(news);
-            });
         });
     </script>
-    {{include  file="$smarty_root/share.html" }}

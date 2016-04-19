@@ -21,9 +21,9 @@
     wx.ready(function () {
 
         wx.onMenuShareAppMessage({
-            title: "分享标题A",
-            desc: "分享描述B",
-            link: "分享链接C",
+            title: "宠爱流浪宠物救助",
+            desc: "快速找到并分享附近需要帮助的流浪宠物",
+            link: "{{$Url}}{{$rootpath}}/index.php",
             imgUrl: "分享链接D",
             trigger: function (res) {
                 // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
@@ -41,8 +41,8 @@
         });
 
         wx.onMenuShareTimeline({
-            title: "分享标题Add",
-            link: "分享链接Cdd",
+            title: "宠爱流浪宠物救助",
+            link: "{{$Url}}{{$rootpath}}/index.php",
             imgUrl: "分享链接CCdd",
             trigger: function (res) {
                 // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
