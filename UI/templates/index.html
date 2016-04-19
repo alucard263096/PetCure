@@ -101,9 +101,9 @@
         function initCtxPoster() {
             $("#ctxPoster").hide();
             $("#btnPost").click(function () {
-                $("#ctxPoster").load("{{$rootpath}}/poster.php", function () {
-                    $("#ctxPoster").fadeIn();
-                });
+                //$("#ctxPoster").load("{{$rootpath}}/poster.php", function () {
+                //    $("#ctxPoster").fadeIn();
+                //});
             });
         }
         function visabledControls(isVisable) {
@@ -244,7 +244,7 @@ scaleSize
                 position: new qq.maps.LatLng(arr.rescue_lat, arr.rescue_lng),
                 map: map,
                 content: "<img class='img-circle' style='width:50px;height:50px;border:2px solid " + labelcolor + ";border-radius:50px' src='" + "{{$uploadpath}}/pet/" + arr.pet_photo + "' />",
-                style: { "color": labelcolor, "text-align": "center", "background": "transparent" }
+                style: { "color": labelcolor, "text-align": "center", "background": "transparent","border":"0px" }
             });
 
             qq.maps.event.addDomListener(label, "click", function () {
