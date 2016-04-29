@@ -133,7 +133,7 @@
 
 		$sql="select *,abs((rescue_lat-$lat)*(rescue_lat-$lat)+(rescue_lng-$lng)*(rescue_lng-$lng)) distance
  from tb_poster
-		where  status='A' 
+		where  status='A' and rescue_lat<>0 and rescue_lng<>0
 		order by distance
 		limit 0,100  ";
 		//--or (DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='C')
