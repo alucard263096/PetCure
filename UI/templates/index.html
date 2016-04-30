@@ -197,8 +197,8 @@
                     var obj = JSON.parse(e);
                     for (i = 0; i < obj["val"].length; i++) {
                         var arr = obj["val"][i];
-                        //addPosterMark(arr);
-                        addPosterLabel(arr);
+                        addPosterMark(arr);
+                        //addPosterLabel(arr);
                         
 
 
@@ -210,17 +210,42 @@
             });
         }
         function addPosterMark(arr) {
+
+            var labelRescueType = "其他";
+            switch (arr.rescue_type) {
+                case "W": labelRescueType = "受伤"; break;
+                case "H": labelRescueType = "饥饿"; break;
+                case "L": labelRescueType = "走失"; break;
+                case "A": labelRescueType = "待领养"; break;
+            }
+            lblPetType = "其它";
+            switch (arr.pet_type) {
+                case "D": lblPetType = "狗狗"; break;
+                case "C": lblPetType = "猫猫"; break;
+                case "O": lblPetType = "小可爱"; break;
+            }
+
+            var labelcolor = "black";
+            var labelRescueLevel = "其它";
+            switch (arr.rescue_level) {
+                case "C": labelcolor = "red"; labelRescueLevel = "严重"; break;
+                case "H": labelcolor = "orange"; labelRescueLevel = "高"; break;
+                case "M": labelcolor = "blue"; labelRescueLevel = "中"; break;
+                case "L": labelcolor = "green"; labelRescueLevel = "低"; break;
+            }
+
+
             var posterMark = new qq.maps.Marker({
                 //设置Marker的位置坐标
                 position: new qq.maps.LatLng(arr.rescue_lat, arr.rescue_lng),
                 //设置显示Marker的地图
                 map: map
             });
-            var imageurl = "{{$uploadpath}}/pet/" + arr.pet_photo;
-            var anchor = new qq.maps.Point(0, 39),
-size = new qq.maps.Size(50, 50),
+            var imageurl = "{{$rootpath}}/img/dog.png";
+            var anchor = new qq.maps.Point(0, 0),
+size = new qq.maps.Size(50, 24),
 origin = new qq.maps.Point(0, 0),
-scaleSize = new qq.maps.Size(40, 40),
+scaleSize = new qq.maps.Size(50, 24),
 icon = new qq.maps.MarkerImage(
 imageurl,
 size,
@@ -228,12 +253,24 @@ origin,
 anchor,
 scaleSize
 );
+            posterMark.setIcon(icon);
 
-            qq.maps.event.addListener(posterMark, 'icon_changed', function () {
-                //alert($("[src$='" + posterMark.getIcon().url + "']").length);
+            qq.maps.event.addDomListener(posterMark, "click", function () {
+
+                info.setContent('<div style="margin:10px;">'
+                    + "<h5><span style='color:" + labelcolor + "'>(紧急:" + labelRescueLevel + ")</span>" + labelRescueType + "的" + lblPetType + arr.rescue_need + "</h5>"
+                    + "<p>描述：" + arr.pet_detail + "</p>"
+                    + "<p>位置：" + arr.rescue_address + " " + arr.rescue_detail + "</p>"
+                    + (arr.contact_name == "" ? "" : "<p>联系人：" + arr.contact_name + "</p>")
+                    + (arr.contact_mobile == "" ? "" : "<p>联系电话：<a href=tel:" + arr.contact_mobile + "'>" + arr.contact_mobile + "</a></p>")
+                    + (arr.contact_wechat == "" ? "" : "<p>联系微信：" + arr.contact_wechat + "</p>")
+                    + (arr.contact_qq == "" ? "" : "<p>联系QQ：" + arr.contact_qq + "</p>")
+                    + "<p style='text-align:right;'><button class='btn btn-success' onclick='openPoster(" + arr.id + ");'>分享和救助</button></p>"
+                    + '</div>');
+                info.setPosition(new qq.maps.LatLng(arr.rescue_lat - 0.0006, Number(arr.rescue_lng) + 0.0006));
+                info.open();
             });
 
-            posterMark.setIcon(icon);
 
             posterMarks[i] = posterMark;
         }
