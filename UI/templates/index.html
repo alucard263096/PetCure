@@ -118,14 +118,14 @@
         }
         function visabledControls(isVisable) {
             if (isVisable) {
-
-                for (i = 0; i < posterLabels.length; i++) {
+                
+                for (i = 0; i < posterMarks.length; i++) {
                     posterLabels[i].setVisible(isVisable);
                 }
                 $("#btnPost").show();
             } else {
                 info.close();
-                for (i = 0; i < posterLabels.length; i++) {
+                for (i = 0; i < posterMarks.length; i++) {
                     posterLabels[i].setVisible(isVisable);
                 }
                 $("#btnPost").hide();
@@ -211,28 +211,7 @@
         }
         function addPosterMark(arr) {
 
-            var labelRescueType = "其他";
-            switch (arr.rescue_type) {
-                case "W": labelRescueType = "受伤"; break;
-                case "H": labelRescueType = "饥饿"; break;
-                case "L": labelRescueType = "走失"; break;
-                case "A": labelRescueType = "待领养"; break;
-            }
-            lblPetType = "其它";
-            switch (arr.pet_type) {
-                case "D": lblPetType = "狗狗"; break;
-                case "C": lblPetType = "猫猫"; break;
-                case "O": lblPetType = "小可爱"; break;
-            }
-
-            var labelcolor = "black";
-            var labelRescueLevel = "其它";
-            switch (arr.rescue_level) {
-                case "C": labelcolor = "red"; labelRescueLevel = "严重"; break;
-                case "H": labelcolor = "orange"; labelRescueLevel = "高"; break;
-                case "M": labelcolor = "blue"; labelRescueLevel = "中"; break;
-                case "L": labelcolor = "green"; labelRescueLevel = "低"; break;
-            }
+            
 
 
             var posterMark = new qq.maps.Marker({
@@ -254,25 +233,56 @@ anchor,
 scaleSize
 );
             posterMark.setIcon(icon);
-
+            posterMark.poster = arr;
             qq.maps.event.addDomListener(posterMark, "click", function () {
-
-                info.setContent('<div style="margin:10px;">'
-                    + "<h5><span style='color:" + labelcolor + "'>(紧急:" + labelRescueLevel + ")</span>" + labelRescueType + "的" + lblPetType + arr.rescue_need + "</h5>"
-                    + "<p>描述：" + arr.pet_detail + "</p>"
-                    + "<p>位置：" + arr.rescue_address + " " + arr.rescue_detail + "</p>"
-                    + (arr.contact_name == "" ? "" : "<p>联系人：" + arr.contact_name + "</p>")
-                    + (arr.contact_mobile == "" ? "" : "<p>联系电话：<a href=tel:" + arr.contact_mobile + "'>" + arr.contact_mobile + "</a></p>")
-                    + (arr.contact_wechat == "" ? "" : "<p>联系微信：" + arr.contact_wechat + "</p>")
-                    + (arr.contact_qq == "" ? "" : "<p>联系QQ：" + arr.contact_qq + "</p>")
-                    + "<p style='text-align:right;'><button class='btn btn-success' onclick='openPoster(" + arr.id + ");'>分享和救助</button></p>"
-                    + '</div>');
-                info.setPosition(new qq.maps.LatLng(arr.rescue_lat - 0.0006, Number(arr.rescue_lng) + 0.0006));
-                info.open();
+                showInfo(arr);
             });
 
 
             posterMarks[i] = posterMark;
+        }
+        function showInfo(arr) {
+
+            var labelRescueType = "其他";
+            switch (arr.rescue_type) {
+                case "W": labelRescueType = "受伤"; break;
+                case "H": labelRescueType = "饥饿"; break;
+                case "L": labelRescueType = "走失"; break;
+                case "A": labelRescueType = "待领养"; break;
+            }
+            lblPetType = "小可爱";
+            switch (arr.pet_type) {
+                case "D": lblPetType = "狗狗"; break;
+                case "C": lblPetType = "猫猫"; break;
+                case "O": lblPetType = "小可爱"; break;
+            }
+
+            var labelcolor = "black";
+            var labelRescueLevel = "其它";
+            switch (arr.rescue_level) {
+                case "C": labelcolor = "red"; labelRescueLevel = "严重"; break;
+                case "H": labelcolor = "orange"; labelRescueLevel = "高"; break;
+                case "M": labelcolor = "blue"; labelRescueLevel = "中"; break;
+                case "L": labelcolor = "green"; labelRescueLevel = "低"; break;
+            }
+
+            info.setContent('<div style="margin:10px;">'
+                + "<h5><span style='color:" + labelcolor + "'>(紧急:" + labelRescueLevel + ")</span>" + labelRescueType + "的" + lblPetType + arr.rescue_need + "</h5>"
+                + "<p>描述：" + arr.pet_detail + "</p>"
+                + "<p>位置：" + arr.rescue_address + " " + arr.rescue_detail + "</p>"
+                + (arr.contact_name == "" ? "" : "<p>联系人：" + arr.contact_name + "</p>")
+                + (arr.contact_mobile == "" ? "" : "<p>联系电话：<a href=tel:" + arr.contact_mobile + "'>" + arr.contact_mobile + "</a></p>")
+                + (arr.contact_wechat == "" ? "" : "<p>联系微信：" + arr.contact_wechat + "</p>")
+                + (arr.contact_qq == "" ? "" : "<p>联系QQ：" + arr.contact_qq + "</p>")
+                + "<p style='text-align:left;'>" +
+                "<button class='btn btn-default btn-sm' onclick='previousPoster(" + arr.id + ");'>上一个</button>&nbsp;" +
+                "<button class='btn btn-default btn-sm' onclick='nextPoster(" + arr.id + ");'>下一个</button></p>" +
+                "<p style='text-align:right;'>" +
+                "<button class='btn btn-success' onclick='openPoster(" + arr.id + ");'>分享和救助</button></p>"
+                + '</div>');
+            info.setPosition(new qq.maps.LatLng(arr.rescue_lat, Number(arr.rescue_lng)));
+            info.open();
+            map.setCenter(new qq.maps.LatLng(arr.rescue_lat, Number(arr.rescue_lng)));
         }
         function addPosterLabel(arr) {
             var labelRescueType = "其他";
@@ -340,6 +350,32 @@ scaleSize
             $("#ctxPoster").load("{{$rootpath}}/showposter.php?id=" + id, function (e) {
                 $("#ctxPoster").fadeIn();
             });
+        }
+        function previousPoster(id) {
+            var cur = 0;
+            for (i = 0; i < posterMarks.length; i++) {
+                if (posterMarks[i].poster.id == id) {
+                    cur = i-1;
+                    break;
+                }
+            }
+            if (cur < 0) {
+                cur = posterMarks.length - 1;
+            }
+            showInfo(posterMarks[cur].poster);
+        }
+        function nextPoster(id) {
+            var cur = 0;
+            for (i = 0; i < posterMarks.length; i++) {
+                if (posterMarks[i].poster.id == id) {
+                    cur = i+1;
+                    break;
+                }
+            }
+            if (cur >= posterMarks.length) {
+                cur = 0;
+            }
+            showInfo(posterMarks[cur].poster);
         }
     </script>
     {{include  file="$smarty_root/share.html" }}
