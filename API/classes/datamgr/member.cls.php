@@ -119,7 +119,7 @@
 			return	outResult(0,"sent success");
 
 	}
-	
+
 
 	public function registerMember($mobile,$verifycode,$password,$name){
 		if($mobile==""){
@@ -152,6 +152,41 @@
 		$query = $this->dbmgr->query($sql);
 
 		return	outResult(0,"register success",$id);
+	}
+
+	public function loginReg($mobile,$password){
+	
+		if($mobile==""){
+			return	outResult(-1,"mobile can not be null");
+		}
+		if($password==""){
+			return	outResult(-2,"password can not be null");
+		}
+		
+
+		$mobile=parameter_filter($mobile);
+		$password=parameter_filter($password);
+		$sql="select id,openid,mobile,password from tb_member where mobile='$mobile'  ";
+		$query = $this->dbmgr->query($sql);
+		$result = $this->dbmgr->fetch_array_all($query); 
+		if(count($result)==0){
+			$id=$this->dbmgr->getNewId("tb_member");
+			$sql="insert into tb_member (id,openid,mobile,password,name,status,created_date,created_user,updated_date,updated_user) values
+			($id,'','$mobile','$password','$mobile','A',".$this->dbmgr->getDate().",-1,".$this->dbmgr->getDate().",-1)";
+			$query = $this->dbmgr->query($sql);
+		}else{
+			if($result[0]["password"]!=$password){
+				return array();
+			}
+		}
+		
+		$sql="select id,openid,mobile,name,photo,status,created_date,created_user,updated_date,updated_user from tb_member where mobile='$mobile'  ";
+		$query = $this->dbmgr->query($sql);
+		$result = $this->dbmgr->fetch_array_all($query); 
+
+		return $result;
+
+
 	}
 
  }
