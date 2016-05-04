@@ -1,0 +1,12 @@
+CREATE TABLE `cw_petcure`.`tb_member` (
+  `id` INT(11) NOT NULL,
+  `openid` VARCHAR(100) NULL DEFAULT NULL,
+  `mobile` VARCHAR(50) NULL DEFAULT NULL,
+  `password` VARCHAR(50) NULL DEFAULT NULL,
+  `name` VARCHAR(50) NULL DEFAULT NULL,
+  `status` VARCHAR(1) NULL DEFAULT NULL,
+  `created_date` DATETIME NULL DEFAULT NULL,
+  `created_user` INT(11) NULL DEFAULT NULL,
+  `updated_date` DATETIME NULL DEFAULT NULL,
+  `updated_user` INT(11) NULL DEFAULT NULL,
+  `photo` VARCHAR(255) NULL DEFAULT NULL);
