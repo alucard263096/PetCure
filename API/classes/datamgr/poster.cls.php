@@ -67,7 +67,7 @@
 			}
 		}
 		$this->dbmgr->commit_trans();
-		return outResult(0,"提交成功",$post_id);
+		return outResult(0,"提交成功",$poster_id);
 	}
 
 	
