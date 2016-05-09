@@ -13,8 +13,8 @@
 <body>
 <form >
 <textarea name='sql' cols=150 rows=50>
-
 </textarea>
+<input type="submit" />
 </form>
 </body>
 <html>
