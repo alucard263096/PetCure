@@ -132,7 +132,7 @@
 			return	outResult(-12,"password can not be null");
 		}
 		$mobile=parameter_filter($mobile);
-		$sql="select count(1) from tb_member where mobile='$mobile' ;"
+		$sql="select count(1) from tb_member where mobile='$mobile' ";
 		$query = $this->dbmgr->query($sql);
 		$result = $this->dbmgr->fetch_array($query); 
 		if($result[0]>0){

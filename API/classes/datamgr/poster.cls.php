@@ -70,8 +70,6 @@
 		return outResult(0,"提交成功",$poster_id);
 	}
 
-	
-
 	public function getPosterList($lat,$lng){
 		$lat=$lat+0;
 		$lng=$lng+0;
