@@ -28,6 +28,7 @@
 		$needs=parameter_filter($request["needs"]);
 		$photos=parameter_filter($request["photos"]);
 		$address=parameter_filter($request["address"]);
+		$contact=parameter_filter($request["contact"]);
 		$lng=parameter_filter($request["lng"])+0;
 		$lat=parameter_filter($request["lat"])+0;
 		$member_id=parameter_filter($request["member_id"])+0;
@@ -80,6 +81,21 @@
 		order by distance
 		limit 0,100  ";
 		//--or (DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='C')
+		$query = $this->dbmgr->query($sql);
+		$return = $this->dbmgr->fetch_array_all($query);
+
+		return $return;
+	}
+
+	public function getPosterPhoto($poster_id){
+		$poster_id=$poster_id+0;
+
+		$sql="select a.id record_id,a.type,a.needs,a.address,a.contact,a.created_date,
+				b.id photo_id,b.photo from  tb_n_record a 
+				inner join tb_n_photo b on a.id=b.record_id
+				where a.poster_id=$poster_id
+				order by a.created_date desc, id ";
+				//--or (DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='C')
 		$query = $this->dbmgr->query($sql);
 		$return = $this->dbmgr->fetch_array_all($query);
 
