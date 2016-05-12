@@ -159,6 +159,21 @@
 		return $return;
 	}
 
+	
+	public function getPosterPhoto($poster_id){
+		$poster_id=$poster_id+0;
+
+		$sql="select a.id record_id,a.type,a.needs,a.address,a.contact,a.created_date,
+				b.id photo_id,b.photo from  tb_n_record a 
+				inner join tb_n_photo b on a.id=b.record_id
+				where a.poster_id=$poster_id
+				order by a.created_date desc, b.id ";
+				//--or (DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='C')
+		$query = $this->dbmgr->query($sql);
+		$return = $this->dbmgr->fetch_array_all($query);
+
+		return $return;
+	}
 
 	public  function __destruct ()
 	{
