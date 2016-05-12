@@ -52,9 +52,10 @@
         jQuery(document).ready(function ($) {
             //Reference http://www.jssor.com/development/slider-with-slideshow-jquery.html
             //Reference http://www.jssor.com/development/tool-slideshow-transition-viewer.html
-
-            $("#sliderb_container").css("height", $(window).height());
-            $("#sliderb_container").css("width", $(window).width());
+            var height = $(window).height();
+            var width = $(window).width();
+            $("#sliderb_container").css("height", height);
+            $("#sliderb_container").css("width", width);
 
             var _SlideshowTransitions = [
             //Fade in R
@@ -72,8 +73,8 @@
                 $ArrowKeyNavigation: true,   			            //[Optional] Allows keyboard (arrow key) navigation or not, default value is false
                 $SlideDuration: 500,                                //[Optional] Specifies default duration (swipe) for slide in milliseconds, default value is 500
                 $MinDragOffsetToSlide: 20,                          //[Optional] Minimum drag offset to trigger slide , default value is 20
-                //$SlideWidth: 600,                                 //[Optional] Width of every slide in pixels, default value is width of 'slides' container
-                //$SlideHeight: 300,                                //[Optional] Height of every slide in pixels, default value is height of 'slides' container
+                $SlideWidth: width,                                 //[Optional] Width of every slide in pixels, default value is width of 'slides' container
+                $SlideHeight: height,                                //[Optional] Height of every slide in pixels, default value is height of 'slides' container
                 $SlideSpacing: 0, 					                //[Optional] Space between each slide in pixels, default value is 0
                 $DisplayPieces: 1,                                  //[Optional] Number of pieces to display (the slideshow would be disabled if the value is set to greater than 1), the default value is 1
                 $ParkingPosition: 0,                                //[Optional] The offset position to park slide (this options applys only when slideshow disabled), default value is 0.
@@ -113,18 +114,7 @@
             var jssor_sliderb = new $JssorSlider$("sliderb_container", options);
             //responsive code begin
             //you can remove responsive code if you don't want the slider scales while window resizes
-            function ScaleSlider() {
-                var parentWidth = jssor_sliderb.$Elmt.parentNode.clientWidth;
-                if (parentWidth)
-                    jssor_sliderb.$ScaleWidth(Math.min(parentWidth, 600));
-                else
-                    window.setTimeout(ScaleSlider, 30);
-            }
-            ScaleSlider();
-
-            $(window).bind("load", ScaleSlider);
-            $(window).bind("resize", ScaleSlider);
-            $(window).bind("orientationchange", ScaleSlider);
+            
             //responsive code end
         });
     </script>
@@ -143,7 +133,7 @@
         </div>
 
         <!-- Slides Container -->
-        <div u="slides" style="cursor: move; position: absolute; left: 0px; top: 0px; width: 600px; height: 300px;
+        <div u="slides" style="cursor: move; position: absolute; left: 0px; top: 0px; width: 320px; height: 460px;
             overflow: hidden;">
             {{foreach from=$photos item=rs}}
             <div>
