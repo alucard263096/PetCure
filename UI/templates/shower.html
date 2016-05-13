@@ -3,6 +3,7 @@
 <head>
     <meta name="viewport"
           content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="{{$rootpath}}/vendors/iSlider/src/style/iSlider.css" />
     <style>
         html, body {
@@ -63,10 +64,11 @@
     <script src="{{$rootpath}}/vendors/iSlider/src/js/plugins/BIZone.js"></script>
     <script>
         var list = [
-        {{foreach from=$photos item=rs key=k}}
-        {{if $k!="0"}},
-        {{/if}}
             {
+                content: "<div style='font-size:18;color:white;text-align: center;padding:30px;'><p>{{$photos.0.needs}}</p><p>鑱旂郴鐢佃瘽:{{$photos.0.contact}}</p></div>"
+            }
+        {{foreach from=$photos item=rs key=k}}
+            ,{
                 content: '{{$uploadpath}}/pet/{{$rs.photo}}'
             }
         {{/foreach}}
@@ -81,13 +83,15 @@
     </script>
 
     {{include  file="$smarty_root/share.html" }}
-
-    var news = new Array();
-    news.title = "{{$photos.0.needs}}";
-    news.desc = "联系电话:{{$photos.0.contact}},地址:{{{{$photos.0.address}}}}";
-    news.link = "{{$Url}}{{$rootpath}}/shower.php?poser_id={{$poster_id}}";
-    news.imgUrl = "{{$Url}}{{$uploadpath}}/pet/{{$photos.0.photo}}";
-    shareNews(news);
-
+    <script>
+            wx.ready(function () {
+                var news = new Array();
+                news.title = "{{$photos.0.needs}}";
+                news.desc = "鑱旂郴鐢佃瘽:{{$photos.0.contact}},鍦板潃:{{{$photos.0.address}}";
+                news.link = "{{$Url}}{{$rootpath}}/shower.php?poser_id={{$poster_id}}";
+                news.imgUrl = "{{$Url}}{{$uploadpath}}/pet/{{$photos.0.photo}}";
+                shareNews(news);
+            });
+    </script>
 </body>
 </html>
