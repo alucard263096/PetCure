@@ -206,7 +206,7 @@
 				$this->dbmgr->query($sql);
 
 				
-				$sql="update tb_n_poster set collectcoount=collectcoount+1 where id=$poster_id ";	
+				$sql="update tb_n_poster set collectcount=collectcount+1 where id=$poster_id ";	
 				$this->dbmgr->query($sql);
 
 			}
@@ -218,7 +218,7 @@
 				$this->dbmgr->query($sql);
 				
 				
-				$sql="update tb_n_poster set collectcoount=collectcoount-1 where id=$poster_id ";	
+				$sql="update tb_n_poster set collectcount=collectcount-1 where id=$poster_id ";	
 				$this->dbmgr->query($sql);
 				}
 		}
@@ -244,7 +244,7 @@
 				$this->dbmgr->query($sql);
 
 				
-				$sql="update tb_n_poster set followcoount=followcoount+1 where id=$poster_id ";	
+				$sql="update tb_n_poster set followcount=followcount+1 where id=$poster_id ";	
 				$this->dbmgr->query($sql);
 
 			}
@@ -256,7 +256,7 @@
 				$this->dbmgr->query($sql);
 				
 				
-				$sql="update tb_n_poster set followcoount=followcoount-1 where id=$poster_id ";	
+				$sql="update tb_n_poster set followcount=followcount-1 where id=$poster_id ";	
 				$this->dbmgr->query($sql);
 				}
 		}
