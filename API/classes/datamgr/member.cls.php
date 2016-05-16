@@ -264,6 +264,8 @@
 		return	outResult(0,"Success",$id);
 	}
 	public function posterInfo($member_id,$poster_id){
+	$member_id=$member_id+0;
+	$poster_id=$poster_id+0;
 		$sql="select case ifnull(b.member_id,0) when  0 then 'N' else 'Y' end collect,
 		case ifnull(c.member_id,0) when  0 then 'N' else 'Y' end follow from tb_n_poster a 
 		left join tb_member_collect b on a.id=b.poster_id and b.member_id= $member_id
@@ -271,6 +273,8 @@
 		where a.id=$poster_id ";
 		$query = $this->dbmgr->query($sql);
 		$result = $this->dbmgr->fetch_array($query);
+
+		return $result;
 	}
  }
  
