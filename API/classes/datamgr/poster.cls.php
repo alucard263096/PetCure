@@ -163,9 +163,8 @@
 
 		$sql="select distinct a.* 
  from tb_n_poster a
- inner join tb_member_collect b on a.id=b.poster_id and b.member_id=$member_id
  inner join tb_n_record c on a.id=c.poster_id and c.created_id=$member_id
-		order by b.created_date desc
+		order by c.created_date desc
 		limit $pageindex,$count  ";
 		//--or (DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='C')
 		$query = $this->dbmgr->query($sql);
