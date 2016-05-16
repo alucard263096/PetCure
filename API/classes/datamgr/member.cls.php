@@ -189,6 +189,87 @@
 
 	}
 
+	public function collectPoster($member_id,$poster_id,$collect){
+		$member_id=$member_id+0;
+		$poster_id=$poster_id+0;
+		
+			$sql="select 1 from tb_member_collect 
+			where member_id=$member_id and poster_id=$poster_id  ";
+		$query = $this->dbmgr->query($sql);
+		$result = $this->dbmgr->fetch_array_all($query);
+		$this->dbmgr->begin_trans();
+		if($collect!="N"){
+
+			if(count($result)==0){
+				$sql="insert into tb_member_collect (member_id,poster_id,created_date)
+				values ($member_id,$poster_id,".$this->dbmgr->getDate().") ";	
+				$this->dbmgr->query($sql);
+
+				
+				$sql="update tb_n_poster set collectcoount=collectcoount+1 where id=$poster_id ";	
+				$this->dbmgr->query($sql);
+
+			}
+
+		}else{
+			if(count($result)>0){
+			$sql="delete from tb_member_collect 
+			where member_id=$member_id and poster_id=$poster_id  ";
+				$this->dbmgr->query($sql);
+				
+				
+				$sql="update tb_n_poster set collectcoount=collectcoount-1 where id=$poster_id ";	
+				$this->dbmgr->query($sql);
+				}
+		}
+		$this->dbmgr->commit_trans();
+		return	outResult(0,"Success",$id);
+	}
+	
+
+	public function followPoster($member_id,$poster_id,$follow){
+		$member_id=$member_id+0;
+		$poster_id=$poster_id+0;
+		
+			$sql="select 1 from tb_member_follow 
+			where member_id=$member_id and poster_id=$poster_id  ";
+		$query = $this->dbmgr->query($sql);
+		$result = $this->dbmgr->fetch_array_all($query);
+		$this->dbmgr->begin_trans();
+		if($follow!="N"){
+
+			if(count($result)==0){
+				$sql="insert into tb_member_follow (member_id,poster_id,created_date)
+				values ($member_id,$poster_id,".$this->dbmgr->getDate().") ";	
+				$this->dbmgr->query($sql);
+
+				
+				$sql="update tb_n_poster set followcoount=followcoount+1 where id=$poster_id ";	
+				$this->dbmgr->query($sql);
+
+			}
+
+		}else{
+			if(count($result)>0){
+			$sql="delete from tb_member_follow 
+			where member_id=$member_id and poster_id=$poster_id  ";
+				$this->dbmgr->query($sql);
+				
+				
+				$sql="update tb_n_poster set followcoount=followcoount-1 where id=$poster_id ";	
+				$this->dbmgr->query($sql);
+				}
+		}
+		$this->dbmgr->commit_trans();
+		return	outResult(0,"Success",$id);
+	}
+	public function posterInfo($member_id,$poster_id){
+		$sql="select case ifnull(b.member_id,0) when  0 then 'N' else 'Y' end collect,
+		case ifnull(c.member_id,0) when  0 then 'N' else 'Y' end follow from tb_n_poster a 
+		left join tb_member_collect b on a.id=b.poster_id and b.member_id= $member_id
+		left join tb_member_follow c on a.id=c.poster_id and c.member_id= $member_id 
+		where a.id=$poster_id ";
+	}
  }
  
  $memberMgr=MemberMgr::getInstance();

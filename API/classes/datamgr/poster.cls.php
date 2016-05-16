@@ -109,6 +109,70 @@
 		return $return;
 	}
 
+	
+	public function getFollowList($member_id,$page,$count){
+		$member_id=$member_id+0;
+		$page=$page+0;
+		$count=$count+0;
+		if($count==0){
+			$count=20;
+		}
+		$pageindex=$page*$count;
+
+		$sql="select a.* 
+ from tb_n_poster a
+ inner join tb_member_follow b on a.id=b.poster_id and b.member_id=$member_id
+		order by b.created_date desc
+		limit $pageindex,$count  ";
+		//--or (DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='C')
+		$query = $this->dbmgr->query($sql);
+		$return = $this->dbmgr->fetch_array_all($query);
+
+		return $return;
+	}
+	
+	public function getCollectList($member_id,$page,$count){
+		$member_id=$member_id+0;
+		$page=$page+0;
+		$count=$count+0;
+		if($count==0){
+			$count=20;
+		}
+		$pageindex=$page*$count;
+
+		$sql="select a.* 
+ from tb_n_poster a
+ inner join tb_member_collect b on a.id=b.poster_id and b.member_id=$member_id
+		order by b.created_date desc
+		limit $pageindex,$count  ";
+		//--or (DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='C')
+		$query = $this->dbmgr->query($sql);
+		$return = $this->dbmgr->fetch_array_all($query);
+
+		return $return;
+	}
+	
+	public function getInvolveList($member_id,$page,$count){
+		$member_id=$member_id+0;
+		$page=$page+0;
+		$count=$count+0;
+		if($count==0){
+			$count=20;
+		}
+		$pageindex=$page*$count;
+
+		$sql="select distinct a.* 
+ from tb_n_poster a
+ inner join tb_member_collect b on a.id=b.poster_id and b.member_id=$member_id
+ inner join tb_n_record c on a.id=c.poster_id and c.created_id=$member_id
+		order by b.created_date desc
+		limit $pageindex,$count  ";
+		//--or (DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='C')
+		$query = $this->dbmgr->query($sql);
+		$return = $this->dbmgr->fetch_array_all($query);
+
+		return $return;
+	}
  }
  
  $posterMgr=PosterMgr::getInstance();
