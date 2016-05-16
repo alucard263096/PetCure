@@ -65,7 +65,7 @@
     <script>
         var list = [
             {
-                content: "<div style='font-size:18;color:white;text-align: center;padding:30px;'><p>{{$photos.0.needs}}</p><p>联系电话:{{$photos.0.contact}}</p></div>"
+                content: "<div style='font-size:18;color:white;text-align: center;padding:30px;'><p>{{$photos.0.needs}}</p><p>联系电话:{{$photos.0.contact}}</p><p>{{$photos.0.address}}</p></div>"
             }
         {{foreach from=$photos item=rs key=k}}
             ,{
