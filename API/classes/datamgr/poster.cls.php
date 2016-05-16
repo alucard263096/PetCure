@@ -71,15 +71,22 @@
 		return outResult(0,"提交成功",$poster_id);
 	}
 
-	public function getPosterList($lat,$lng){
+	public function getPosterList($lat,$lng,$page,$count){
 		$lat=$lat+0;
 		$lng=$lng+0;
+
+		$page=$page+0;
+		$count=$count+0;
+		if($count==0){
+			$count=20;
+		}
+		$pageindex=$page*$count;
 
 		$sql="select *,abs((lat-$lat)*(lat-$lat)+(lng-$lng)*(lng-$lng)) distance
  from tb_n_poster
 		where  status='A' and lat<>0 and lng<>0
 		order by distance
-		limit 0,100  ";
+		limit $pageindex,$count  ";
 		//--or (DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='C')
 		$query = $this->dbmgr->query($sql);
 		$return = $this->dbmgr->fetch_array_all($query);
