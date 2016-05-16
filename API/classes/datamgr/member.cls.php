@@ -272,7 +272,7 @@
 		left join tb_member_follow c on a.id=c.poster_id and c.member_id= $member_id 
 		where a.id=$poster_id ";
 		$query = $this->dbmgr->query($sql);
-		$result = $this->dbmgr->fetch_array($query);
+		$result = $this->dbmgr->fetch_array_all($query);
 
 		return $result;
 	}
