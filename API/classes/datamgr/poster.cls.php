@@ -89,6 +89,10 @@
 			$orderby=" updated_date desc";
 		}else if($order==2){
 			$orderby=" updated_date";
+		}else if($order==3){
+			$orderby=" collectcount desc";
+		}else if($order==4){
+			$orderby=" followcount desc";
 		}
 
 		$page=$page+0;
