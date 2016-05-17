@@ -3,7 +3,7 @@
 #[Root]
 $CONFIG['rootpath']		= '/PetCure/CMS';  
 //$CONFIG['charset']		= 'utf-8'; 
-$CONFIG['Title']             = '阿米卡-爱我宝贝';
+$CONFIG['Title']             = '宠物流浪日记';
 $CONFIG['URL']="http://www.myhkdoc.com/PetCure/UI";
 $CONFIG['lang']="zh-cn";//en-us
 $CONFIG["frontendurl"]="http://www.myhkdoc.com/PetCure/UI";

@@ -6,7 +6,7 @@
   <fields>
     <field>
       <name>代码</name>
-      <key>code</key>
+      <key>index_key</key>
       <type>text</type>
       <notnull>1</notnull>
       <displayinlist>1</displayinlist>
