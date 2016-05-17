@@ -7,8 +7,13 @@ class XmlModel
   private $PageName;
 
   public function __construct($name,$pagename){
-      $xmlstr=$this->loadXmlFile($name);
+      GLOBAL $CONFIG,$SysLangCode;
+
+	  $xmlstr=$this->loadXmlFile($name);
       $this->XmlData=$this->xmlToArray($xmlstr);
+	  if($CONFIG["SupportMultiLanguage"]==true){
+		$this->XmlData=ResetNameWithLang($this->XmlData,$SysLangCode);
+	  }
 	  $this->PageName=$pagename;
   }
 
@@ -81,7 +86,11 @@ class XmlModel
 	$fields=$this->XmlData["fields"]["field"];
 	foreach ($fields as $value){
 		if($value["displayinlist"]=="1"){
-			if($value["type"]=="select"){
+			if($value["type"]=="flist"&&$value["relatetable"]!=""){
+				$table=$value["relatetable"];
+				
+				$sql=$sql." ,'' ".$value["key"];
+			}else if($value["type"]=="select"){
 
 				$sql=$sql." ,case   r_main.".$value["key"]." ";
 				foreach ($value["options"]["option"] as $option){
@@ -186,6 +195,7 @@ class XmlModel
 			$displayfield=$value["displayfield"];
 			$condition=$value["condition"];
 			$ismutillang=$value["fmutillang"];
+
 			$arrayvalue=$this->GetFKeyData($dbMgr,$displayfield,$tablename,$tablerename,$condition,$ismutillang);
 			
 			$Arr=Array();
@@ -203,7 +213,10 @@ class XmlModel
 	
 	$sql=$this->GetSearchSql($request);
 	$query = $dbMgr->query($sql);
-	$result = $dbMgr->fetch_array_all($query); 
+	$result = $dbMgr->fetch_array_all($query);
+	$result=$this->ClearData($result);
+
+	$result=$this->ReloadFListData($dbMgr,$result);
 
     $smartyMgr->assign("ModelData",$this->XmlData);
     $smartyMgr->assign("PageName",$this->PageName);
@@ -211,11 +224,56 @@ class XmlModel
     $smartyMgr->display(ROOT.'/templates/model/result.html');
 
   }
+
+  public function ReloadFListData($dbMgr,$result){
+	$fields=$this->XmlData["fields"]["field"];
+	foreach ($fields as $value){
+		if($value["type"]=="flist"){
+			$rtable=$value["relatetable"];
+			if($rtable!=""){
+				for($i=0;$i<count($result);$i++){
+					$sql="select pid,fid from $rtable where pid=".$result[$i]["id"];
+					$query = $dbMgr->query($sql);
+					$rs = $dbMgr->fetch_array_all($query);
+
+					$isfirst=1;
+					$str="";
+					foreach($rs as $v){
+						if($isfirst==0){
+							$str.=",";
+						}
+						$isfirst=0;
+						$str.=$v["fid"];
+					}
+					$result[$i][$value["key"]]=$str;
+				}
+			}
+		}
+	}
+	return $result;
+  }
+
+  public function ClearData($result){
+	$count=count($result);
+	for($i=0;$i<$count;$i++){
+		for($j=0;$j<count($result[$i]);$j++){
+			$value=$result[$i][$j];
+			if($value instanceof DateTime){
+				$result[$i][$j]= $value->format('Y-m-d H:i:s');
+			}
+		}
+	}
+	return $result;
+  }
+
   public function ShowGridResult($dbMgr,$smartyMgr,$request,$parenturl){
 	$sql=$this->GetSearchSql($request);
 
 	$query = $dbMgr->query($sql);
 	$result = $dbMgr->fetch_array_all($query); 
+	$result=$this->ClearData($result);
+
+	$result=$this->ReloadFListData($dbMgr,$result);
 	
 	$this->GetFListData($dbMgr,$smartyMgr);
     $smartyMgr->assign("ModelData",$this->XmlData);
@@ -245,7 +303,12 @@ class XmlModel
 
 	$sql="select * from ".$this->XmlData["tablename"]." where id=$id";
 	$query = $dbMgr->query($sql);
-	$result = $dbMgr->fetch_array($query); 
+	$result = $dbMgr->fetch_array_all($query); 
+
+	$result=$this->ClearData($result);
+	$result=$this->ReloadFListData($dbMgr,$result);
+
+	$result=$result[0];
 
 	if($this->XmlData["ismutillang"]=="1"){
 	$sql="select * from ".$this->XmlData["tablename"]."_lang where oid=$id";
@@ -308,6 +371,12 @@ class XmlModel
 			if($value["type"]=="grid"){
 				continue;
 			}
+			if($value["type"]=="flist"&&$value["relatetable"]!=""){
+				continue;
+			}
+			if($value["nosave"]=="1"){
+				continue;
+			}
 			$sql=$sql.",".$value["key"]."";
 		}
 		$sql=$sql.",created_date,created_user,updated_date,updated_user ) values (";
@@ -317,6 +386,12 @@ class XmlModel
 			
 			if($value["type"]=="grid"
 			||$value["ismutillang"]){
+				continue;
+			}
+			if($value["type"]=="flist"&&$value["relatetable"]!=""){
+				continue;
+			}
+			if($value["nosave"]=="1"){
 				continue;
 			}
 
@@ -343,6 +418,12 @@ class XmlModel
 			||$value["type"]=="password"){
 				continue;
 			}
+			if($value["type"]=="flist"&&$value["relatetable"]!=""){
+				continue;
+			}
+			if($value["nosave"]=="1"){
+				continue;
+			}
 			$sql=$sql.", ".$value["key"]."='".parameter_filter($request[$value["key"]])."'";
 		}
 		$sql=$sql." where id=$id";
@@ -354,6 +435,24 @@ class XmlModel
 				$sql=$sql." ".$value["key"]."='".md5($request[$value["key"]])."'";
 				$sql=$sql." where id=$id and ".$value["key"]."<>'".parameter_filter($request[$value["key"]])."'";
 				$query = $dbMgr->query($sql);
+			}
+			if($value["type"]=="flist"&&$value["relatetable"]!=""){
+				$relatetable=$value["relatetable"];
+				$sql="delete from $relatetable where pid=$id";
+				$query = $dbMgr->query($sql);
+				$arr=explode(",",$request[$value["key"]]);
+				if(count($arr)>0){
+					$sql="insert into $relatetable (pid,fid) values";
+					$isfirst=1;
+					foreach($arr as $v){
+						if($isfirst==0){
+							$sql.=",";
+						}
+						$isfirst=0;
+						$sql.=" ($id,$v)";
+					}
+					$query = $dbMgr->query($sql);
+				}
 			}
 		}
 		if($haveMutilLang){
@@ -395,6 +494,7 @@ class XmlModel
 	$dbMgr->commit_trans();
 	return "right".$id;
   }
+
   public function Delete($dbMgr,$idlist,$sysuser){
     
 	$sql="update ".$this->XmlData["tablename"]." set status='D',updated_user=$sysuser,updated_date=".$dbMgr->getDate()." where id in ($idlist)";
@@ -431,6 +531,44 @@ class XmlModel
 		echo $result;
 	  }
 
+ }
+
+ 
+  public function ShowAPIList($dbMgr){
+  
+    $sql=$this->GetSearchSql($request);
+	$query = $dbMgr->query($sql);
+	$result = $dbMgr->fetch_array_all($query); 
+
+	outputXml($result);
+  }
+  public function DetailApi($dbMgr,$id,$lang){
+	if($this->XmlData["ismutillang"]=="1"){
+		$sql="select * from ".$this->XmlData["tablename"]." m
+		inner join ".$this->XmlData["tablename"]."_lang ml on m.id=ml.oid and code='$lang' where id=$id";
+		$query = $dbMgr->query($sql);
+		$result = $dbMgr->fetch_array_all($query);
+	}else{
+		$sql="select * from ".$this->XmlData["tablename"]." where id=$id";
+		$query = $dbMgr->query($sql);
+		$result = $dbMgr->fetch_array_all($query);
+	}
+
+	outputXml($result);
+  }
+	  
+  public function DefaultShowAPI($dbmgr,$action,$request){
+	  if($action==""){
+		$this->ShowAPIList($dbmgr);
+	  }if($action=="detail"){
+		$this->DetailApi($dbmgr,$request["id"],$request["lang"]);
+	  }else if($action=="save"){
+		$result=$this->Save($dbmgr,$request,-1);
+		echo $result;
+	  }else if($action=="delete"){
+		$result=$this->Delete($dbmgr,$request["idlist"],-1);
+		echo $result;
+	  }
   }
 
 }

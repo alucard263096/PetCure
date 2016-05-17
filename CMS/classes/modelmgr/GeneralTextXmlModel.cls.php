@@ -9,9 +9,9 @@ class GeneralTextXmlModel extends XmlModel{
 	public function Save($dbMgr,$request,$sysuser){
 	Global $SysLang; 
 		if($request["primary_id"]==""){
-			$key=$request["code"];
+			$key=$request["key"];
 			$loginname=parameter_filter($key);
-			$sql="select * from tb_general where code='$key' ";
+			$sql="select * from tb_general where `key`='$key' ";
 			$query = $dbMgr->query($sql);
 			$userRows = $dbMgr->fetch_array_all($query); 
 			if(count($userRows)>0){

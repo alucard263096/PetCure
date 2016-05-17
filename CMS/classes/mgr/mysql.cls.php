@@ -125,7 +125,6 @@ class DbMysql
 		$id=$result[0];
 		return $id;
 	}
-
 	function getDate(){
 		return " now() ";
 	}

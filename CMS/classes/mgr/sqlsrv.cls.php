@@ -116,7 +116,7 @@ class DbSqlsrv
 	* @return resource
 	*/
 	function query($sql) 
-	{Global $CONFIG;
+	{
 		if(!($query = @sqlsrv_query($this->conn,$sql)))
 		{
 			logger_mgr::logError("sql error :$sql");
@@ -124,15 +124,9 @@ class DbSqlsrv
 			{
 				$this->rollback_trans();
 			}
-
-			if($CONFIG['solution_configuration']=="debug"){
-				print_r(sqlsrv_errors());
-				echo "<br /> ".$sql;
-			}else{
-				$msg='Sqlsrv Query Error';
-			}
-			
-			$this->halt($msg, $sql);
+			echo "aa";
+			print_r( sqlsrv_errors());
+			$this->halt($sql.sqlsrv_errors(), $sql);
 			
 			
 		}
@@ -141,6 +135,7 @@ class DbSqlsrv
 		
 		return $query;
 	}
+
 	function getNewId($tablename){
 		$sql="select isnull(max(id),0)+1 from ".$tablename;
 		$query = $this->query($sql);
@@ -148,6 +143,7 @@ class DbSqlsrv
 		$id=$result[0];
 		return $id;
 	}
+	
 	function getDate(){
 		return " GETDATE() ";
 	}
@@ -155,7 +151,7 @@ class DbSqlsrv
 	{
 		if(!($query = @sqlsrv_query($this->conn,$sql)))
 		{
-			$this->halt($sql.'Sqlsrv Query Error', $sql);
+			$this->halt($sql.sqlsrv_errors(),, $sql);
 		}
 		$this->querynum++;
 		return $query;

@@ -6,6 +6,8 @@ class BannerXmlModel extends XmlModel{
 		parent::__construct("banner",$pagename);
 	}
 
+
+
 }
 
 ?>
