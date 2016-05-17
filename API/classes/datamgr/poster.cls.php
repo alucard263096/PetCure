@@ -71,9 +71,25 @@
 		return outResult(0,"提交成功",$poster_id);
 	}
 
-	public function getPosterList($lat,$lng,$page,$count){
+	public function getPosterList($lat,$lng,$page,$count,$type,$order){
 		$lat=$lat+0;
 		$lng=$lng+0;
+		$type=$type+0;
+		$order=$order+0;
+		$condition="";
+		$orderby="distance";
+		if($type==1){
+			$condition=" and type='0'";
+		}else if($type==2){
+			$condition=" and type='1'";
+		}
+		if($order==0){
+			$orderby="distance";
+		}else if($order==1){
+			$orderby=" updated_date desc";
+		}else if($order==2){
+			$orderby=" updated_date";
+		}
 
 		$page=$page+0;
 		$count=$count+0;
@@ -82,10 +98,12 @@
 		}
 		$pageindex=$page*$count;
 
+		
+
 		$sql="select *,abs((lat-$lat)*(lat-$lat)+(lng-$lng)*(lng-$lng)) distance
  from tb_n_poster
-		where  status='A' and lat<>0 and lng<>0
-		order by distance
+		where  status='A' and lat<>0 and lng<>0 $condition
+		order by $orderby
 		limit $pageindex,$count  ";
 		//--or (DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='C')
 		$query = $this->dbmgr->query($sql);
@@ -110,8 +128,27 @@
 	}
 
 	
-	public function getFollowList($member_id,$page,$count){
+	public function getFollowList($member_id,$page,$count,$type,$order){
 		$member_id=$member_id+0;
+		$type=$type+0;
+		$order=$order+0;
+		$condition="";
+		$orderby="b.created_date desc";
+		if($type==1){
+			$condition=" and type='0'";
+		}else if($type==2){
+			$condition=" and type='1'";
+		}
+		if($order==0){
+			$orderby="b.created_date desc";
+		}else if($order==1){
+			$orderby=" b.created_date ";
+		}else if($order==2){
+			$orderby=" a.updated_date desc";
+		}else if($order==2){
+			$orderby=" a.updated_date";
+		}
+
 		$page=$page+0;
 		$count=$count+0;
 		if($count==0){
@@ -122,7 +159,8 @@
 		$sql="select a.* 
  from tb_n_poster a
  inner join tb_member_follow b on a.id=b.poster_id and b.member_id=$member_id
-		order by b.created_date desc
+ where 1=1 $condition
+		order by $orderby
 		limit $pageindex,$count  ";
 		//--or (DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='C')
 		$query = $this->dbmgr->query($sql);
@@ -131,8 +169,27 @@
 		return $return;
 	}
 	
-	public function getCollectList($member_id,$page,$count){
+	public function getCollectList($member_id,$page,$count,$type,$order){
 		$member_id=$member_id+0;
+		$type=$type+0;
+		$order=$order+0;
+		$condition="";
+		$orderby="b.created_date desc";
+		if($type==1){
+			$condition=" and type='0'";
+		}else if($type==2){
+			$condition=" and type='1'";
+		}
+		if($order==0){
+			$orderby="b.created_date desc";
+		}else if($order==1){
+			$orderby=" b.created_date ";
+		}else if($order==2){
+			$orderby=" a.updated_date desc";
+		}else if($order==2){
+			$orderby=" a.updated_date";
+		}
+
 		$page=$page+0;
 		$count=$count+0;
 		if($count==0){
@@ -143,7 +200,8 @@
 		$sql="select a.* 
  from tb_n_poster a
  inner join tb_member_collect b on a.id=b.poster_id and b.member_id=$member_id
-		order by b.created_date desc
+ where 1=1 $condition
+		order by $orderby
 		limit $pageindex,$count  ";
 		//--or (DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='C')
 		$query = $this->dbmgr->query($sql);
@@ -152,8 +210,27 @@
 		return $return;
 	}
 	
-	public function getInvolveList($member_id,$page,$count){
+	public function getInvolveList($member_id,$page,$count,$type,$order){
 		$member_id=$member_id+0;
+		$type=$type+0;
+		$order=$order+0;
+		$condition="";
+		$orderby="b.created_date desc";
+		if($type==1){
+			$condition=" and type='0'";
+		}else if($type==2){
+			$condition=" and type='1'";
+		}
+		if($order==0){
+			$orderby="c.created_date desc";
+		}else if($order==1){
+			$orderby=" c.created_date ";
+		}else if($order==2){
+			$orderby=" a.updated_date desc";
+		}else if($order==2){
+			$orderby=" a.updated_date";
+		}
+
 		$page=$page+0;
 		$count=$count+0;
 		if($count==0){
@@ -164,7 +241,8 @@
 		$sql="select distinct a.* 
  from tb_n_poster a
  inner join tb_n_record c on a.id=c.poster_id and c.created_id=$member_id
-		order by c.created_date desc
+ where 1=1 $condition
+		order by $orderby
 		limit $pageindex,$count  ";
 		//--or (DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='C')
 		$query = $this->dbmgr->query($sql);
