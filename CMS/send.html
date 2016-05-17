@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="js/jquery-2.0.3.min.js"></script>
+</head>
+<body>
+    <input type="text" id="phone" />
+    <input type="number" id="count" value="100" />
+    <button onclick="sendMsgCode();" >发送</button>
+</body>
+<script>
+
+    function sendMsgCode() {
+        // var phoneReg =
+        // /^(0|86|17951|12593)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+        var phoneReg = /^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+        var phone = $("#phone").val().trim();
+        if (!phoneReg.test(phone)) {
+            alert("号码不对");
+        } else {
+            var count = $("#count").val();
+            for (i = 0; i < count; i++) {
+                $.ajax({
+                    async: true,
+                    cache: false,
+                    type: "POST",
+                    url: "http://www.aikf.com/aikfadmin/regist/sendPhoneCode.htm",
+                    data: {
+                        phoneNum: phone
+                    },
+                    dataType: "json",
+                    error: function (result) {
+                    },
+                    success: function (result) {
+                    }
+                });
+            }
+        }
+    }
+</script>
+</html>
