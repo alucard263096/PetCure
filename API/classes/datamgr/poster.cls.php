@@ -32,6 +32,8 @@
 		$lng=parameter_filter($request["lng"])+0;
 		$lat=parameter_filter($request["lat"])+0;
 		$member_id=parameter_filter($request["member_id"])+0;
+		$poster_id=parameter_filter($request["poster_id"])+0;
+		$save=parameter_filter($request["save"]);
 
 		if($needs==""){
 			return	outResult(-1,"您没有写一下想说的话");
@@ -45,12 +47,27 @@
 		$photosarr=explode(";",$photos);
 		$this->dbmgr->begin_trans();
 
-		$poster_id=$this->dbmgr->getNewId("tb_n_poster");
-		$sql="insert into tb_n_poster 
-		(id,type,needs,photo,address,lat,lng,contact,created_date,created_id,updated_date,updated_id,status)
-		values ($poster_id,$type,'$needs','".$photosarr[0]."','$address',$lat,$lng,'$contact'
-		,".$this->dbmgr->getDate().",$member_id,".$this->dbmgr->getDate().",$member_id,'A')";
-		$this->dbmgr->query($sql);
+
+		if($poster_id==0){
+			$poster_id=$this->dbmgr->getNewId("tb_n_poster");
+			$sql="insert into tb_n_poster 
+			(id,type,needs,photo,address,lat,lng,contact,created_date,created_id,updated_date,updated_id,status)
+			values ($poster_id,$type,'$needs','".$photosarr[0]."','$address',$lat,$lng,'$contact'
+			,".$this->dbmgr->getDate().",$member_id,".$this->dbmgr->getDate().",$member_id,'A')";
+			$this->dbmgr->query($sql);
+		}else{
+
+			if($save=='Y'){
+				$status='F';
+			}else{
+				$status='A';
+			}
+			$sql="update tb_n_poster set
+			needs='$needs',photo='".$photosarr[0]."',address='$address',lat='$lat',lng='$lng',contact='$lng'
+			,updated_date=".$this->dbmgr->getDate().",updated_id=$member_id,status='$status'
+			where id=$poster_id ";
+			$this->dbmgr->query($sql);
+		}
 
 		$record_id=$this->dbmgr->getNewId("tb_n_record");
 		$sql="insert into tb_n_record 
@@ -101,8 +118,6 @@
 			$count=20;
 		}
 		$pageindex=$page*$count;
-
-		
 
 		$sql="select *,abs((lat-$lat)*(lat-$lat)+(lng-$lng)*(lng-$lng)) distance
  from tb_n_poster
