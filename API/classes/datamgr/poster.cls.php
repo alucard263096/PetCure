@@ -119,9 +119,10 @@
 	public function getPosterPhoto($poster_id){
 		$poster_id=$poster_id+0;
 
-		$sql="select a.id record_id,a.type,a.needs,a.address,a.contact,a.created_date,
+		$sql="select a.id record_id,a.type,a.needs,a.address,a.contact,a.created_date,c.created_id created_member,
 				b.id photo_id,b.photo from  tb_n_record a 
 				inner join tb_n_photo b on a.id=b.record_id
+				inner join tb_n_poster c on a.poster_id=c.id
 				where a.poster_id=$poster_id
 				order by a.created_date desc, b.id ";
 				//--or (DATE_SUB(CURDATE(), INTERVAL 1 DAY) <= date(updated_date) and status='C')
