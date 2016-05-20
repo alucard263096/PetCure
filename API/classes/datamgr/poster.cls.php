@@ -329,6 +329,53 @@
 		$return = $this->dbmgr->fetch_array_all($query);
 		return $return;
 	}
+
+	public function getNotice($lat,$lng,$member_id,$interval){
+		$lat=$lat+0.0;
+		$lng=$lng+0.0;
+		$member_id=$member_id+0;
+		$interval=$interval+0;
+
+		$ret= array();
+		if($lat>0&&$lng>0&&$interval>0){
+			$sql="select id from tb_n_poster";
+			$query = $this->dbmgr->query($sql);
+			$rs = $this->dbmgr->fetch_array_all($query);
+			$count=count($rs);
+			if($count>0){
+				$r=array();
+				$r[0]="";
+				$r["type"]="0";
+				$r[1]="";
+				$r["count"]=count($rs);
+				$r[2]="";
+				$r["ret"]=$rs[0]["id"];
+				$r[3]="";
+				$r["msg"]="您的附近有".$count."只小可爱等着你的帮助";
+				$ret[]=$r;
+			}
+		}
+		if($member_id>0){
+			$sql="select poster_id from tb_n_hint";
+			$query = $this->dbmgr->query($sql);
+			$rs = $this->dbmgr->fetch_array_all($query);
+			$count=count($rs);
+			if($count>0){
+				$r=array();
+				$r[0]="";
+				$r["type"]="1";
+				$r[1]="";
+				$r["count"]=count($rs);
+				$r[2]="";
+				$r["ret"]=$rs[0]["id"];
+				$r[3]="";
+				$r["msg"]="您收到了".$count."条求助线索";
+				$ret[]=$r;
+			}
+		}
+		return $ret;
+
+	}
  }
  
  $posterMgr=PosterMgr::getInstance();
