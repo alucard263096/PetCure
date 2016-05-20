@@ -35,6 +35,10 @@
 		$poster_id=parameter_filter($request["poster_id"])+0;
 		$save=parameter_filter($request["save"]);
 
+		if($poster_id>0&&$type=="1"){
+			return $this->createHint($request);
+		}
+
 		if($needs==""){
 			return	outResult(-1,"您没有写一下想说的话");
 		}
