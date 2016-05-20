@@ -338,7 +338,12 @@
 
 		$ret= array();
 		if($lat>0&&$lng>0&&$interval>0){
-			$sql="select id from tb_n_poster";
+			$sql="select id
+,ROUND(6378.138*2*ASIN(SQRT(POW(SIN(($lat*PI()/180-lat*PI()/180)/2),2)+COS($lat*PI()/180)*COS(lat*PI()/180)*POW(SIN(($lng*PI()/180-lng*PI()/180)/2),2)))*1000) distance from tb_n_poster 
+			where status='A'
+             and timestampdiff(SECOND, updated_date,now())<40
+             and ROUND(6378.138*2*ASIN(SQRT(POW(SIN(($lat*PI()/180-lat*PI()/180)/2),2)+COS($lat*PI()/180)*COS(lat*PI()/180)*POW(SIN(($lng*PI()/180-lng*PI()/180)/2),2)))*1000)<5000
+             order by distance";
 			$query = $this->dbmgr->query($sql);
 			$rs = $this->dbmgr->fetch_array_all($query);
 			$count=count($rs);
@@ -354,13 +359,16 @@
 				$r["msg"]="附近有".$count."只小可爱要你帮忙";
 				$r[4]="";
 				$r["id"]=1;
+				$r[5]="";
+				$r["submsg"]="就离你".$rs[0]["distance"]."米了";
 				$ret[]=$r;
 			}
 		}
 		if($member_id>0){
-			$sql="select poster_id from tb_n_hint";
+			$sql="select poster_id from tb_n_hint where created_id=$member_id and isread='N' ";
 			$query = $this->dbmgr->query($sql);
 			$rs = $this->dbmgr->fetch_array_all($query);
+
 			$count=count($rs);
 			if($count>0){
 				$r=array();
@@ -374,7 +382,13 @@
 				$r["msg"]="您收到了".$count."条求助线索";
 				$r[4]="";
 				$r["id"]=2;
+				$r[5]="";
+				$r["submsg"]="请立即查看";
 				$ret[]=$r;
+
+				
+				$sql="update tb_n_hint set isread='Y' where  created_id=$member_id and isread='N'";
+				$this->dbmgr->query($sql);
 			}
 		}
 		return $ret;
