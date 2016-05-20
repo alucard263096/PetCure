@@ -119,7 +119,7 @@
 		}
 		$pageindex=$page*$count;
 
-		$sql="select *,abs((lat-$lat)*(lat-$lat)+(lng-$lng)*(lng-$lng)) distance
+		$sql="select *,abs((lat-$lat)*(lat-$lat)+(lng-$lng)*(lng-$lng)) distanceji
  from tb_n_poster
 		where  status='A' and lat<>0 and lng<>0 $condition
 		order by $orderby
@@ -268,6 +268,61 @@
 		$query = $this->dbmgr->query($sql);
 		$return = $this->dbmgr->fetch_array_all($query);
 
+		return $return;
+	}
+
+	public function createHint($request){
+		$needs=parameter_filter($request["needs"]);
+		$photos=parameter_filter($request["photos"]);
+		$address=parameter_filter($request["address"]);
+		$contact=parameter_filter($request["contact"]);
+		$lng=parameter_filter($request["lng"])+0;
+		$lat=parameter_filter($request["lat"])+0;
+		$member_id=parameter_filter($request["member_id"])+0;
+		$poster_id=parameter_filter($request["poster_id"])+0;
+
+		if($needs==""){
+			return	outResult(-1,"您没有写一下想说的话");
+		}
+		$photosarr=explode(";",$photos);
+		$this->dbmgr->begin_trans();
+
+		$id=$this->dbmgr->getNewId("tb_n_hint");
+		$sql="insert into tb_n_hint 
+		(id,poster_id,needs
+		,photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,
+		address,lat,lng,contact
+		,created_date,created_id,status)
+		values ($id,$poster_id,'$needs'
+		,'".$photosarr[0]."','".$photosarr[1]."','".$photosarr[2]."','".$photosarr[3]."','".$photosarr[4]."','".$photosarr[5]."','".$photosarr[6]."','".$photosarr[7]."'
+		,'$address',$lat,$lng,'$contact'
+		,".$this->dbmgr->getDate().",$member_id,'A')";
+		$this->dbmgr->query($sql);
+
+		
+		$this->dbmgr->commit_trans();
+		return outResult(0,"提交成功",$poster_id);
+	}
+
+	public function hintList($poster_id,$page,$count){
+
+	
+		$page=$page+0;
+		$count=$count+0;
+		if($count==0){
+			$count=20;
+		}
+		$pageindex=$page*$count;
+
+		$poster_id=$poster_id+0;
+		$sql="select * from tb_n_hint 
+		where poster_id=$poster_id 
+		order by created_date desc 
+		limit $pageindex,$count ";
+		$this->dbmgr->query($sql);
+		
+		$query = $this->dbmgr->query($sql);
+		$return = $this->dbmgr->fetch_array_all($query);
 		return $return;
 	}
  }

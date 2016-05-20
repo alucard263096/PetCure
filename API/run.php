@@ -5,7 +5,7 @@
   $sql=$_REQUEST["sql"];
   if($sql!=""){
 	$query =$dbmgr->query($sql);
-		$query = $this->dbmgr->query($sql);
+		$query = $dbmgr->dbmgr->query($sql);
 		$return = $dbmgr->fetch_array_all($query);
 		print_r($return);
   }
