@@ -123,7 +123,7 @@
 		}
 		$pageindex=$page*$count;
 
-		$sql="select *,abs((lat-$lat)*(lat-$lat)+(lng-$lng)*(lng-$lng)) distanceji
+		$sql="select *,abs((lat-$lat)*(lat-$lat)+(lng-$lng)*(lng-$lng)) distance
  from tb_n_poster
 		where  status='A' and lat<>0 and lng<>0 $condition
 		order by $orderby
