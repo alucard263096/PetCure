@@ -345,7 +345,7 @@
 			if($count>0){
 				$r=array();
 				$r[0]="";
-				$r["type"]="0";
+				$r["type"]="PosterListActivity";
 				$r[1]="";
 				$r["count"]=count($rs);
 				$r[2]="";
@@ -363,7 +363,7 @@
 			if($count>0){
 				$r=array();
 				$r[0]="";
-				$r["type"]="1";
+				$r["type"]="HintListActivity";
 				$r[1]="";
 				$r["count"]=count($rs);
 				$r[2]="";
