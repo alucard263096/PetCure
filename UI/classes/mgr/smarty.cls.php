@@ -19,6 +19,7 @@ $smarty->right_delimiter="}}";
  $smarty->assign('smarty_root',ROOT."/templates");
  $smarty->assign('file_url',$_SERVER["PHP_SELF"]);
  $smarty->assign('file_url_parameter',strtr($_SERVER["QUERY_STRING"],$rep));
+ $smarty->assign('REQUEST',$_REQUEST);
  $rep=array($CONFIG['smarty']['rootpath']=>'');
  $smarty->assign('script_path',strtr($_SERVER["PHP_SELF"],$rep));
  $smarty->assign('charset',$CONFIG['charset']);

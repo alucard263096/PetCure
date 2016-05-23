@@ -7,10 +7,11 @@
  */
   require 'include/common.inc.php';
   include ROOT.'/include/init.inc.php';
+
+  $smarty->assign("subform","Y");
   
-  $smarty->assign("verify",md5(time().$file["name"]));
+
   
-  
-  $smarty->display(ROOT.'/templates/poster.html');
+  $smarty->display(ROOT.'/templates/create.html');
   
 ?>

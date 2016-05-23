@@ -8,12 +8,12 @@
   require 'include/common.inc.php';
   include ROOT.'/include/init.inc.php';
   
-  include ROOT.'/classes/mgr/wechat.cls.php';
-  $signPackage = $WechatMgr->GetSignPackage();
-  $userInfo = $WechatMgr->getUserBaseInfo();
+//  include ROOT.'/classes/mgr/wechat.cls.php';
+//  $signPackage = $WechatMgr->GetSignPackage();
+//  $userInfo = $WechatMgr->getUserBaseInfo();
 
-  $smarty->assign("wechatsign",$signPackage);
-  $smarty->assign("userinfo",$userInfo);
+//  $smarty->assign("wechatsign",$signPackage);
+//  $smarty->assign("userinfo",$userInfo);
   
   $smarty->display(ROOT.'/templates/index.html');
   

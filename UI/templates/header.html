@@ -34,14 +34,39 @@
     <section class="vbox">
         <header class="bg-white-only header header-md navbar navbar-fixed-top-xs">
             <div class="navbar-header aside bg-info dk">
+                {{if $subform=='Y'}}
+                <a class="btn btn-link visible-xs " id="btnBackHome">
+                    <i class="fa-chevron-left fa"></i>
+                </a>
+                <script>
+                    $(document).ready(function () {
+                        $("#btnBackHome").click(function () {
+
+                            try {
+                                window.history.go(-1);
+                            } catch (ex) {
+                                window.location.href = "{{$rootpath}}/index.php";
+                            }
+
+                        });
+                    });
+                </script>
+                {{else}}
                 <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen,open" data-target="#nav,html">
                     <i class="icon-list"></i>
                 </a>
+                {{/if}}
                 {{include  file="$smarty_root/logo.html" }}
+                {{if $subform=='Y'}}
+                <a class="btn btn-link visible-xs" id="btnSend">
+
+                </a>
+                {{else}}
                 <!--
                 <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".user">
                     <i class="icon-settings"></i>
                 </a>-->
+                {{/if}}
             </div>      
             <ul class="nav navbar-nav hidden-xs">
                 <li>
@@ -68,18 +93,18 @@
 
                             </div>
                         </section>
-
+                        <!--
                         <footer class="footer hidden-xs no-padder text-center-nav-xs">
                             <div class="bg hidden-xs ">
 
                                 {{include  file="$smarty_root/profile_bottom.html" }}
 
                             </div>
-                        </footer>
+                        </footer>-->
                     </section>
                 </aside>
                 <!-- /.aside -->
                 <section id="content">
-                    <section class="vbox bg-light">
+                    <section class="vbox ">
                         <section>
                             <section class="hbox stretch">

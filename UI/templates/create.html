@@ -1,0 +1,20 @@
+{{include  file="$smarty_root/header.html" }}
+
+
+
+<section>
+    <section class="vbox">
+        <section class="scrollable padder-lg" id="map_geocoding" >
+            <textarea placeholder="流浪的小可爱需要什么..." 
+                      style="background-color:transparent;border:0px;width:100%;margin-top:10px;font-size:20px;" 
+                      rows="3" maxlength="150"></textarea>
+        </section>
+    </section>
+</section>
+<script>
+    $(document).ready(function () {
+        $("#btnSend").text("发出");
+        $("#btnSend").attr("disabled", true);
+    });
+</script>
+{{include  file="$smarty_root/footer.html" }}
