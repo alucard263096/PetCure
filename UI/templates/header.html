@@ -2,7 +2,7 @@
 <html lang="en" class="app">
 <head>
     <meta charset="utf-8" />
-    <title>{{$MYSITE.title}}</title>
+    <title>{{$Title}}</title>
     <meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <link rel="stylesheet" href="{{$rootpath}}/js/jPlayer/jplayer.flat.css" type="text/css" />
@@ -17,6 +17,18 @@
       <script src="{{$rootpath}}/js/ie/respond.min.js"></script>
       <script src="{{$rootpath}}/js/ie/excanvas.js"></script>
     <![endif]-->
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?34cea80cf2a5ec98c4c38cf1d5250344";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <script src="{{$rootpath}}/js/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="{{$rootpath}}/js/bootstrap.js"></script>
 </head>
 <body class="">
     <section class="vbox">

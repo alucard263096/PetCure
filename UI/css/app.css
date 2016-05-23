@@ -753,7 +753,7 @@ body.container {
 }
 .scrollable {
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 .no-touch .scrollable.hover {
   overflow-y: hidden;

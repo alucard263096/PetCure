@@ -1,12 +1,28 @@
 {{include  file="$smarty_root/header.html" }}
 
 
-<section id="gmap_geocoding" style="min-height:240px;">
-    代码在此
+
+<section>
+    <section class="vbox">
+        <section class="scrollable padder-lg" id="map_geocoding" style="min-height:480px;" >
+        </section>
+    </section>
 </section>
 
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key={{$MapKey}}"></script>
+<script>
+    var map = null;
+    $(document).ready(function () {
 
+        initMap();
+    });
+    function initMap() {
+        map = new qq.maps.Map(document.getElementById("map_geocoding"), {
+            center: new qq.maps.LatLng(22.543670, 114.059640),      // 地图的中心地理坐标。
+            zoom: 17
+        });
+    }
+</script>
 
-
-
+    
 {{include  file="$smarty_root/footer.html" }}
