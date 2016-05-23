@@ -25,7 +25,7 @@ $CONFIG['error_handler'] ="E_ALL";
 
 #[Database]
 $CONFIG['database']['provider']	= 'mysql';  //mssql,sqlsrv
-$CONFIG['database']['host']		= '120.24.239.49';  
+$CONFIG['database']['host']		= 'localhost';  
 $CONFIG['database']['database']	= 'cw_petcure';  
 $CONFIG['database']['user']		= 'root';
 $CONFIG['database']['psw']		= 'root';

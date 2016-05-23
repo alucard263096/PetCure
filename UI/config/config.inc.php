@@ -4,6 +4,7 @@
 $CONFIG['rootpath']		= '/PetCure/UI';  
 //$CONFIG['charset']		= 'utf-8'; 
 $CONFIG['URL']="http://www.myhkdoc.com";
+$CONFIG['API']="/PetCure/API";
 $CONFIG["SessionName"]="PetCure";
 $CONFIG["Title"]="流浪宠物日记";
 

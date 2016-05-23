@@ -8,19 +8,127 @@
         </section>
     </section>
 </section>
+<a id="btnPost" href="#" class="btn btn-rounded btn-lg btn-icon  btn-danger" style="position:fixed;right:20px;bottom:20px;"><i class="icon-envelope icon"></i></a>
+<iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="http://apis.map.qq.com/tools/geolocation?key={{$MapKey}}&referer={{$Title}}"></iframe>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key={{$MapKey}}&libraries=drawing,geometry,autocomplete,convertor"></script>
 
-<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key={{$MapKey}}"></script>
 <script>
     var map = null;
+    var located = false;
+    var lat, lng;
+    var posterMarks = new Array();
+    var info = null;
     $(document).ready(function () {
-
         initMap();
+        $("#btnPost").click(function () {
+
+        });
     });
     function initMap() {
         map = new qq.maps.Map(document.getElementById("map_geocoding"), {
             center: new qq.maps.LatLng(22.543670, 114.059640),      // 地图的中心地理坐标。
-            zoom: 17
+            zoom: 17,
+            zoomControl: false,
+            mapTypeControl:false
         });
+        info = new qq.maps.InfoWindow({
+            map: map
+        });
+        window.addEventListener('message', function (event) {
+            if (located == false) {
+                // 接收位置信息
+                located = true;
+                loc = event.data;
+                if (loc && loc.module == 'geolocation') { //定位成功,防止其他应用也会向该页面post信息，需判断module是否为'geolocation'
+                    var center = new qq.maps.LatLng(loc.lat, loc.lng);
+                    lat = loc.lat;
+                    lng = loc.lng;
+                    map.setCenter(center);
+                    loadPosters();
+                    
+                } else { //定位组件在定位失败后，也会触发message, event.data为null
+                    alert('定位失败,请刷新页面或者启动GPS定位');
+                }
+            }
+        }, false);
+        document.getElementById("geoPage").contentWindow.postMessage('getLocation', '*');
+    }
+    function loadPosters() {
+        var json = {
+            lat: lat,
+            lng: lng,
+            count: 100
+        }
+        callXmlLoader("{{$API}}/Poster/list.php", json, function (e) {
+            //alert(e.length);
+            for (var i = 0; i < e.length; i++) {
+                addPosterMark(e[i]);
+            }
+        });
+    }
+    function addPosterMark(arr) {
+
+        var imageurl = "{{$uploadpath}}/pet/" + arr.photo;
+        var posterMark = new qq.maps.Label({
+            position: new qq.maps.LatLng(Number(arr.lat) + 0.0006, Number(arr.lng) - 0.0006),
+            map: map,
+            content: "<img class='img-circle' style='width:50px;height:50px;' src='" + imageurl + "' />",
+            style: { "text-align": "center", "background": arr.type=="0"?"blue":"red", "border": "0px","border-radius":"50px","padding":"3px" }
+        });
+        
+        posterMark.poster = arr;
+        qq.maps.event.addDomListener(posterMark, "click", function () {
+            showInfo(arr);
+        });
+
+        posterMarks.push(posterMark);
+    }
+    function previousPoster(id) {
+        var cur = 0;
+        for (i = 0; i < posterMarks.length; i++) {
+            if (posterMarks[i].poster.id == id) {
+                cur = i - 1;
+                break;
+            }
+        }
+        if (cur < 0) {
+            cur = posterMarks.length - 1;
+        }
+        showInfo(posterMarks[cur].poster);
+    }
+
+    function showInfo(arr) {
+
+        info.setContent('<div style="margin:10px;">'
+            + "<h4>" + arr.needs + "</h4>"
+            + "<p>" + arr.contact + "</p>"
+            + "<div class='m-b-sm'>"
+		               +"<div class='btn-group btn-group-justified'>"
+		                  + "<a href='#' class='btn btn-default' onclick='previousPoster(" + arr.id + ");'><i class='fa-angle-double-left fa'></i></a>"
+		                  + "<a href='#' class='btn btn-success' onclick='openPoster(" + arr.id + ");'>详情</a>"
+		                  + "<a href='#' class='btn btn-default' onclick='nextPoster(" + arr.id + ");'><i class='fa-angle-double-right fa'></i></a>"
+		                +"</div>"
+		              +"</div>"
+            //+ "<a class='btn btn-default btn-sm' onclick='previousPoster(" + arr.id + ");'></a>"
+            //+ "<button class='btn btn-success' onclick='openPoster(" + arr.id + ");'>分享和救助</button>"
+             //+ "<button class='btn btn-default btn-sm' onclick='nextPoster(" + arr.id + ");'>下一个</button></p>"
+            + '</div>');
+        info.setPosition(new qq.maps.LatLng(arr.lat, Number(arr.lng)));
+        info.open();
+        map.setCenter(new qq.maps.LatLng(arr.lat, Number(arr.lng)));
+    }
+    function nextPoster(id) {
+        var cur = 0;
+        for (i = 0; i < posterMarks.length; i++) {
+            if (posterMarks[i].poster.id == id) {
+                cur = i + 1;
+                break;
+            }
+        }
+        if (cur >= posterMarks.length) {
+            cur = 0;
+        }
+        showInfo(posterMarks[cur].poster);
     }
 </script>
 

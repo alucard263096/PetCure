@@ -5,7 +5,6 @@
     <title>{{$Title}}</title>
     <meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <link rel="stylesheet" href="{{$rootpath}}/js/jPlayer/jplayer.flat.css" type="text/css" />
     <link rel="stylesheet" href="{{$rootpath}}/css/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="{{$rootpath}}/css/animate.css" type="text/css" />
     <link rel="stylesheet" href="{{$rootpath}}/css/font-awesome.min.css" type="text/css" />
@@ -29,6 +28,7 @@
     <script src="{{$rootpath}}/js/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="{{$rootpath}}/js/bootstrap.js"></script>
+    <script src="{{$rootpath}}/js/WebLoader.js"></script>
 </head>
 <body class="">
     <section class="vbox">
@@ -38,10 +38,12 @@
                     <i class="icon-list"></i>
                 </a>
                 {{include  file="$smarty_root/logo.html" }}
+                <!--
                 <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".user">
                     <i class="icon-settings"></i>
-                </a>
-            </div>      <ul class="nav navbar-nav hidden-xs">
+                </a>-->
+            </div>      
+            <ul class="nav navbar-nav hidden-xs">
                 <li>
                     <a href="#nav,.navbar-header" data-toggle="class:nav-xs,nav-xs" class="text-muted">
                         <i class="fa fa-indent text"></i>
