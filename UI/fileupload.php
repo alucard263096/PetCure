@@ -1,6 +1,7 @@
 <?php
  require 'include/common.inc.php';
  require ROOT.'/classes/obj/upload.php';
+ require ROOT.'/classes/obj/imageresize.php';
  $field=$_REQUEST["field"];
  $module=$_REQUEST["module"];
  if($module==""){
@@ -22,6 +23,10 @@
  }
  $file=new Upload($file,$filename,$folder,true);
  echo $file->safetyUpload();
+
+ $rezie=new Resize($folder.$filename,480,800);
+ $rezie->DoResize();
+
  echo "|~~|".$filename."|~~|".$orifilename;
 
 

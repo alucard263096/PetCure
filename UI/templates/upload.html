@@ -18,10 +18,10 @@
 			    "fileElementId":  key,
 			    "dataType": 'text',
 			    "success": function (data, status) {
-
+			        //alert(data);
 			        if (data.substring(0, 7) == "success") {
 			            str = data.substring(7, data.length);
-			            $("#content_" + key).val(str.split('|~~|')[1]);
+			            //$("#content_" + key).val(str.split('|~~|')[1]);
 			            afterFileUpload(str.split('|~~|')[1], str.split('|~~|')[2]);
 
 			        } else {

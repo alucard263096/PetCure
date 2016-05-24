@@ -1,13 +1,26 @@
 {{include  file="$smarty_root/header.html" }}
+{{include  file="$smarty_root/upload.html" }}
 
-
-
+<style>
+    #lsImages div{
+        padding:10px;
+    }
+</style>
 <section>
     <section class="vbox">
-        <section class="scrollable padder-lg" id="map_geocoding" >
-            <textarea placeholder="流浪的小可爱需要什么..." 
-                      style="background-color:transparent;border:0px;width:100%;margin-top:10px;font-size:20px;" 
-                      rows="3" maxlength="150"></textarea>
+        <section class="scrollable padder-lg"  >
+            <div class="row">
+                <div class="col-xs-12">
+                    <textarea placeholder="{{$needstips}}"
+                              style="background-color:transparent;border:0px;width:100%;margin-top:10px;font-size:20px;"
+                              rows="3" maxlength="150"></textarea>
+                </div>
+            </div>
+            <div class="row" id="lsImages">
+                <div class="col-xs-3" >
+                    <img class="img-responsive" src="{{$rootpath}}/images/icon_addpic_focused.png" id="btnAddImage" />
+                </div>
+            </div>
         </section>
     </section>
 </section>
@@ -15,6 +28,20 @@
     $(document).ready(function () {
         $("#btnSend").text("发出");
         $("#btnSend").attr("disabled", true);
+
+        $("#btnAddImage").click(function () {
+            callUpload("pet");
+        });
+
     });
+    afterFileUpload = function (filesavename, filename) {
+        var str = "<div class='col-xs-3'>"
+                        + "<img class='img-responsive' src='{{$uploadpath}}/pet/" + filesavename + "' val='" + filesavename + "' />"
+                    + "</div>";
+        $("#lsImages").prepend(str);
+        if ($("#lsImages div").length > 8) {
+            $("#btnAddImage").hide();
+        }
+    };
 </script>
 {{include  file="$smarty_root/footer.html" }}

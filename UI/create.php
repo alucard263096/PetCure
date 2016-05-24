@@ -10,7 +10,12 @@
 
   $smarty->assign("subform","Y");
   
-
+  $needstips="流浪的小可爱需要什么...";
+  if($_REQUEST["type"]=="1"){
+	$needstips="我现在最需要的帮助是...";
+  }
+  
+  $smarty->assign("needstips",$needstips);
   
   $smarty->display(ROOT.'/templates/create.html');
   
