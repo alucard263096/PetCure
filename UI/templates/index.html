@@ -83,7 +83,7 @@
 
             var imageurl = "{{$uploadpath}}/pet/" + arr.photo;
             var posterMark = new qq.maps.Label({
-                position: new qq.maps.LatLng(Number(arr.lat) + 0.0006, Number(arr.lng) - 0.0006),
+                position: new qq.maps.LatLng(Number(arr.lat) , Number(arr.lng) ),
                 map: map,
                 content: "<img class='img-circle' style='width:50px;height:50px;' src='" + imageurl + "' />",
                 style: { "text-align": "center", "background": arr.type == "0" ? "blue" : "red", "border": "0px", "border-radius": "50px", "padding": "3px" }

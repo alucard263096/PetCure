@@ -11,7 +11,7 @@
         <section class="scrollable padder-lg"  >
             <div class="row">
                 <div class="col-xs-12">
-                    <textarea placeholder="{{$needstips}}"
+                    <textarea placeholder="{{$needstips}}" id="txtNeeds"
                               style="background-color:transparent;border:0px;width:100%;margin-top:10px;font-size:20px;"
                               rows="3" maxlength="150"></textarea>
                 </div>
@@ -21,27 +21,193 @@
                     <img class="img-responsive" src="{{$rootpath}}/images/icon_addpic_focused.png" id="btnAddImage" />
                 </div>
             </div>
+            <hr />
+            <div class="row" >
+                <a href="#modal-form" data-toggle="modal">
+                    <div class="col-xs-1">
+                        <i class="fa-map-marker fa"></i>
+                    </div>
+                    <div class="col-xs-9"><span id="txtAddress">点击获取位置...</span></div>
+                    <input type="hidden" id="txtLat" value="0" />
+                    <input type="hidden" id="txtLng" value="0" />
+                    <input type="hidden" id="txtCity" value="深圳市" />
+                    <div class="col-xs-1"><i class="fa-angle-right fa"></i></div>
+                </a>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-xs-1">
+                    <i class=" fa-phone fa"></i>
+                </div>
+                <div class="col-xs-9"><span id="txtContact">{{$member.mobile}}</span></div>
+            </div>
         </section>
     </section>
 </section>
+<div class="modal fade" id="modal-form">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body wrapper-lg">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <section class="panel panel-default">
+                            <header class="panel-heading">
+                                <input type="text" class="input-sm form-control" placeholder="输入关键字进行所在位置" id="txtSearchKeyword" >
+                            </header>
+                            <ul class="list-group alt" id="lbAddress">
+                                <li class="list-group-item">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <div><a href="#">没有数据</a></div>
+                                            <small class="text-muted"></small>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </section> 
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="http://apis.map.qq.com/tools/geolocation?key={{$MapKey}}&referer={{$Title}}"></iframe>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key={{$MapKey}}&libraries=drawing,geometry,autocomplete,convertor"></script>
 <script>
+    var searchService;
     $(document).ready(function () {
         $("#btnSend").text("发出");
         $("#btnSend").attr("disabled", true);
+        $("#btnSend").click(function () {
+            var photos = "";
+            $("#lsImages img").each(function () {
+                var photo = $(this).attr("pname");
+                if ($.trim(photo) != "") {
+                    photos += photo;
+                }
+            });
+            var json = {
+                "type": "{{$REQUEST.type}}"
+                , "needs": $("#txtNeeds").val()
+                , "photos": photos
+                , "address": $("#txtAddress").text()
+                , "contact": $("#txtContact").text()
+                , "lat": $("#txtLat").val()
+                , "lng": $("#txtLng").val()
+                , "member_id": "{{$member.id}}"
+            };
+            callXmlLoader("{{$API}}/Poster/create.php", json, function (e) {
+                //alert(e.length);
+                for (var i = 0; i < e.length; i++) {
+                    if (e[0].id == "0") {
+                        window.location.href = "{{$rootpath}}/index.php";
+                    } else {
+                        alert(e[0].result);
+                    }
+                }
+            });
+        });
 
         $("#btnAddImage").click(function () {
             callUpload("pet");
         });
 
+        $("#txtNeeds").change(function () {
+            checkIfCanPost();
+        });
+
+        searchService = new qq.maps.SearchService({
+            //检索成功的回调函数
+            complete: function (results) {
+                //设置回调函数参数
+                try {
+                    $("#lbAddress").html("");
+                    var pois = results.detail.pois;
+                    if (pois.length > 0) {
+                        for (var i = 0, l = pois.length; i < l; i++) {
+                            var poi = pois[i];
+                            //扩展边界范围，用来包含搜索到的Poi点
+                            var str = "<li class='list-group-item' onclick='addrItemClick(\"" + poi.name + "\",\"" + poi.address + "\"," + poi.latLng.getLat() + "," + poi.latLng.getLng() + ")'>"
+                                            + "<div class='media'>"
+                                            + "<div class='media-body'>"
+                                            + "<div><a href='#'>" + poi.name + "</a></div>"
+                                            + "<small class='text-muted '>" + poi.address + "</small>"
+                                            + "</div>"
+                                            + "</div>"
+                                            + "</li>";
+                            $("#lbAddress").append(str);
+                        }
+                    } else {
+                        var str = "<li class='list-group-item'>"
+                                            + "<div class='media'>"
+                                            + "<div class='media-body'>"
+                                            + "<div><a href='#' class='lbaddrName'>没有数据</a></div>"
+                                            + "<small class='text-muted lbaddrAddress'></small>"
+                                            + "</div>"
+                                            + "</div>"
+                                            + "</li>";
+                        $("#lbAddress").append(str);
+                    }
+                } catch (ex) {
+                    //alert(ex.message);
+                }
+            },
+            //若服务请求失败，则运行以下函数
+            error: function () {
+                alert("地图位置检索出错。");
+            }
+        });
+
+        $("#txtSearchKeyword").change(function () {
+            var keyword = $("#txtSearchKeyword").val();
+            var city = $("#txtCity").val();
+            searchService.setLocation(city);
+            searchService.search(keyword);
+        });
+
+        window.addEventListener('message', function (event) {
+            loc = event.data;
+            if (loc && loc.module == 'geolocation') { //定位成功,防止其他应用也会向该页面post信息，需判断module是否为'geolocation'
+                var str = loc.addr;
+                $("#txtAddress").text(str);
+                $("#txtLat").val(loc.lat);
+                $("#txtLng").val(loc.lng);
+                $("#txtCity").val(loc.city);
+
+            } else { //定位组件在定位失败后，也会触发message, event.data为null
+                alert('定位失败,请刷新页面或者启动GPS定位');
+            }
+        }, false);
     });
+    function addrItemClick(name, address, lat, lng) {
+        $("#txtAddress").text(name + " " + address);
+        $("#txtLag").val(lat);
+        $("#txtLng").val(lng);
+        $('#modal-form').modal('hide');
+
+        checkIfCanPost();
+    }
     afterFileUpload = function (filesavename, filename) {
         var str = "<div class='col-xs-3'>"
-                        + "<img class='img-responsive' src='{{$uploadpath}}/pet/" + filesavename + "' val='" + filesavename + "' />"
+                        + "<img class='img-responsive' src='{{$uploadpath}}/pet/" + filesavename + "' pname='" + filesavename + "' />"
                     + "</div>";
         $("#lsImages").prepend(str);
         if ($("#lsImages div").length > 8) {
             $("#btnAddImage").hide();
         }
+        checkIfCanPost();
     };
+    function checkIfCanPost() {
+        //alert(($("#txtNeeds").val().length > 0 ? "Y" : "N")
+        //    + ($("#lsImages div").length > 1 ? "Y" : "N")
+        //    + ( $("#txtLat").val()!="0" ? "Y" : "N"))
+        if ($("#txtNeeds").val().length > 0
+            && $("#lsImages div").length > 1
+            && $("#txtLat").val()!="0") {
+            $("#btnSend").attr("disabled", false);
+        } else {
+            $("#btnSend").attr("disabled", true);
+        }
+    }
 </script>
 {{include  file="$smarty_root/footer.html" }}
