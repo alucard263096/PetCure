@@ -1,97 +1,172 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport"
-          content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" href="{{$rootpath}}/vendors/iSlider/src/style/iSlider.css" />
-    <style>
-        html, body {
-            height: 100%;
-        }
+{{include  file="$smarty_root/header.html" }}
+{{include  file="$smarty_root/upload.html" }}
 
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
+<section>
+    <section class="vbox">
+        <section class="scrollable">
+            <div class="carousel slide auto " id="c-slide">
+                
+            </div>
+        </section>
+    </section>
+</section>
+<div class="modal fade" id="doact">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body wrapper-lg">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a href="#" class="btn btn-info btn-block" id="btnHelp">我来帮助</a>
+                        <a href="#" class="btn btn-default btn-block" id="btnFollow" val="N">关注</a>
+                        <a href="#" class="btn btn-default btn-block" id="btnCollect" val="N">收藏</a>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<script>
+    var type = "0";
+    var created_member = "0";
+    $(document).ready(function () {
 
-        #iSlider-wrapper {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #ffffff;
-        }
-
-        .islider-outer > li {
-            background-color: #999999;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .islider-btn-outer {
-            z-index: 1000;
-        }
-
-        .ro {
-            height: 100%;
-            width: 100%;
-            color: #ffffff;
-            font-size: 64px;
-        }
-
-            .ro:before {
-                content: '';
-                position: absolute;
-                left: 100px;
-                top: 100px;
-                background: cornflowerblue;
-                -webkit-border-radius: 100px;
-                -moz-border-radius: 100px;
-                border-radius: 100px;
-                width: 100px;
-                height: 100px;
-            }
-    </style>
-</head>
-<body>
-    <div id="iSlider-wrapper"></div>
-    <div style="z-index:999;" >aa</div>
-    <script src="{{$rootpath}}/vendors/iSlider/src/js/iSlider.js"></script>
-    <script src="{{$rootpath}}/vendors/iSlider/src/js/ext/animate.js"></script>
-    <script src="{{$rootpath}}/vendors/iSlider/src/js/plugins/dot.js"></script>
-    <script src="{{$rootpath}}/vendors/iSlider/src/js/plugins/button.js"></script>
-    <script src="{{$rootpath}}/vendors/iSlider/src/js/plugins/zoompic.js"></script>
-    <script src="{{$rootpath}}/vendors/iSlider/src/js/plugins/BIZone.js"></script>
-    <script>
-        var list = [
-            {
-                content: "<div style='font-size:18;color:white;text-align: center;padding:30px;'><p>{{$photos.0.needs}}</p><p>联系电话:{{$photos.0.contact}}</p><p>{{$photos.0.address}}</p></div>"
-            }
-        {{foreach from=$photos item=rs key=k}}
-            ,{
-                content: '{{$uploadpath}}/pet/{{$rs.photo}}'
-            }
-        {{/foreach}}
-        ];
-
-        var S = new iSlider(document.getElementById('iSlider-wrapper'), list, {
-            isAutoplay: 1,
-            isLooping: 1,
-            isOverspread: 1,
-            animateTime: 800
+        $("#btnSend").text("更多");
+        $("#btnSend").click(function () {
+            $("#doact").modal("show");
         });
-    </script>
 
-    {{include  file="$smarty_root/share.html" }}
-    <script>
-            wx.ready(function () {
-                var news = new Array();
-                news.title = "{{$photos.0.needs}}";
-                news.desc = "联系电话:{{$photos.0.contact}},地址:{{{$photos.0.address}}";
-                news.link = "{{$Url}}{{$rootpath}}/shower.php?poser_id={{$poster_id}}";
-                news.imgUrl = "{{$Url}}{{$uploadpath}}/pet/{{$photos.0.photo}}";
-                shareNews(news);
+        
+
+        $("#btnFollow").click(function () {
+            if ("{{$member.id}}" == "") {
+                window.location.href = window.location.href + "&check=Y";
+                return;
+            }
+            var json = {
+                poster_id: "{{$REQUEST.id}}",
+                member_id: "{{$member.id}}",
+                follow: $(this).attr("val") == "N" ? "Y" : "N"
+            };
+            callXmlLoader("{{$API}}/Member/follow.php", json, function (e) {
+                if (e[0].id == "0") {
+                    if ($("#btnFollow").attr("val") == "Y") {
+                        $("#btnFollow").attr("val", "N");
+                        $("#btnFollow").text("关注");
+                        alert("取消关注成功");
+                    } else {
+                        $("#btnFollow").attr("val", "Y");
+                        alert("关注成功");
+                        $("#btnFollow").text("取消关注");
+                    }
+                }
             });
-    </script>
-</body>
-</html>
+            $("#doact").modal("hide");
+        });
+
+        $("#btnHelp").click(function () {
+
+            if (type == "1") {
+                if ("{{$member.id}}" == created_member) {
+                    window.location.href = "{{$rootpath}}/hintlist.php?poster_id={{$id}}";
+                    return;
+                }
+            }
+            window.location.href = "{{$rootpath}}/create.php?poster_id={{$id}}&type=" + type;
+
+        });
+
+
+        $("#btnCollect").click(function () {
+            if ("{{$member.id}}" == "") {
+                window.location.href = window.location.href + "&check=Y";
+                return;
+            }
+            var json = {
+                poster_id: "{{$REQUEST.id}}",
+                member_id: "{{$member.id}}",
+                collect: $(this).attr("val") == "N" ? "Y" : "N"
+            };
+            callXmlLoader("{{$API}}/Member/collect.php", json, function (e) {
+                if (e[0].id == "0") {
+                    if ($("#btnCollect").attr("val") == "Y") {
+                        $("#btnCollect").attr("val", "N");
+                        $("#btnCollect").text("收藏");
+                        alert("取消收藏成功");
+                    } else {
+                        $("#btnCollect").attr("val", "Y");
+                        $("#btnCollect").text("取消收藏");
+                        alert("收藏成功");
+                    }
+                }
+            });
+            $("#doact").modal("hide");
+        });
+
+        var json = {
+            poster_id: "{{$REQUEST.id}}"
+        };
+        callXmlLoader("{{$API}}/Poster/photo.php", json, function (e) {
+            //alert(e.length);
+            var str = "<ol class='carousel-indicators out'>";
+            for (var i = 0; i < e.length; i++) {
+                if (i == 0) {
+                    str += "<li data-target='#c-slide' data-slide-to='" + i + "' class='active'></li>";
+                    type = e[i].type;
+                    created_member = e[i].created_member;
+                    InitHelp();
+                } else {
+                    str += "<li data-target='#c-slide' data-slide-to='"+i+"' class=''></li>";
+                }
+            }
+            str += "</ol>";
+            str += "<div class='carousel-inner'>";
+            for (var i = 0; i < e.length; i++) {
+                var content = "("+(i+1)+"/"+e.length+") "+e[i].needs+"<br />联系方式:"+e[i].contact+"<br />"+e[i].address;
+                if (i == 0) {
+                    str += "<div class='item active' >";
+                } else {
+                    str += "<div class='item' >";
+                }
+                str += "<p class='ptext'>" + content + "</p>";
+                str += "<img class='img-responsive' src='{{$uploadpath}}/pet/" + e[i].photo + "' />";
+                str += "</div>";
+            }
+            str += "</div>";
+            str += "<a class='left carousel-control' href='#c-slide' data-slide='prev'>";
+            str += "<i class='fa fa-angle-left'></i>";
+            str += "</a>";
+            str += "<a class='right carousel-control' href='#c-slide' data-slide='next'>";
+            str += "<i class='fa fa-angle-right'></i>";
+            str += "</a>";
+            $("#c-slide").html(str);
+        });
+        if ("{{$member.id}}" != "") {
+            json = {
+                poster_id: "{{$REQUEST.id}}",
+                member_id: "{{$member.id}}"
+            };
+            callXmlLoader("{{$API}}/Member/posterinfo.php", json, function (e) {
+                for (var i = 0; i < e.length; i++) {
+                    if (e[i].collect == "Y") {
+                        $("#btnCollect").attr("val", "Y");
+                        $("#btnCollect").text("取消收藏");
+                    }
+                    if (e[i].follow == "Y") {
+                        $("#btnFollow").attr("val", "Y");
+                        $("#btnFollow").text("取消关注");
+                    }
+                }
+            });
+        }
+    });
+    function InitHelp() {
+        if (type == "1") {
+            if ("{{$member.id}}" == created_member) {
+                $("#btnHelp").text("查看线索");
+            } else {
+                $("#btnHelp").text("提供线索");
+            }
+        }
+    };
+</script>
+{{include  file="$smarty_root/footer.html" }}

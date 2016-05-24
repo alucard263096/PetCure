@@ -143,5 +143,8 @@
             }
             showInfo(posterMarks[cur].poster);
         }
+        function openPoster(id) {
+            window.location.href = "{{$rootpath}}/shower.php?id="+id;
+        }
     </script>
     {{include  file="$smarty_root/footer.html" }}

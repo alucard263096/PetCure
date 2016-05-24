@@ -7,16 +7,13 @@
  */
   require 'include/common.inc.php';
   include ROOT.'/include/init.inc.php';
-  include ROOT.'/classes/datamgr/poster.cls.php';
-  
-  include ROOT.'/classes/mgr/wechat.cls.php';
-  $signPackage = $WechatMgr->GetSignPackage();
-  
-  $poster_id=$_REQUEST["poster_id"];
-  $photos=$posterMgr->getPosterPhoto($poster_id);
+
+  if($_REQUEST["check"]!=""){
+	include ROOT.'/include/member.inc.php';
+  }
 
   
-  $smarty->assign("wechatsign",$signPackage);
-  $smarty->assign("photos",$photos);
+  $smarty->assign("subform","Y");
+  
   $smarty->display(ROOT.'/templates/shower.html');
 ?>
