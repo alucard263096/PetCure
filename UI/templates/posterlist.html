@@ -1,0 +1,57 @@
+{{include  file="$smarty_root/header.html" }}
+
+
+
+<iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="http://apis.map.qq.com/tools/geolocation?key={{$MapKey}}&referer={{$Title}}"></iframe>
+<section>
+    <section class="vbox">
+        <section class="scrollable" id="lvMain" >
+        </section>
+    </section>
+</section>
+<script>
+    var page = 0;
+    var lat = 22.543670, lng = 114.059640;
+    var located = true;
+    $(document).ready(function () {
+        window.addEventListener('message', function (event) {
+            loc = event.data;
+            if (located) {
+                if (loc && loc.module == 'geolocation') { //定位成功,防止其他应用也会向该页面post信息，需判断module是否为'geolocation'
+                    lat = loc.lat;
+                    lng = loc.lng;
+                }
+                located = false;
+                LoadData();
+            }
+        }, false);
+    });
+    function LoadData() {
+        var json = {
+            lat: lat,
+            lng: lng,
+            page: page,
+            count: 20,
+            type: 0,
+            order: 0
+        };
+        callXmlLoader("{{$API}}/Poster/list.php", json, function (e) {
+            for (var i = 0; i < e.length; i++) {
+                var str = "<div class='row'>";
+                str += "<a href='{{$rootpath}}/shower.php?id=" + e[i].id + "'>";
+                str += "<div class='col-xs-12'>";
+                str += "<h3 class='padder'>"+e[i].needs+"</h3>";
+                str += "<div style='width:100%;height:200px; background:no-repeat center url({{$uploadpath}}/pet/"+e[i].photo+")'></div>";
+                str += "</div>";
+                str += "<div class='col-xs-12 text-right' style='margin-top:5px;padding-right:25px;'>";
+                str += "关注(" + e[i].followcount + ") 收藏(" + e[i].collectcount + ")";
+                str += "</div>";
+                str += "</a>";
+                str += "</div>";
+                str += "<hr />";
+                $("#lvMain").append(str);
+            }
+        });
+    }
+</script>
+{{include  file="$smarty_root/footer.html" }}
