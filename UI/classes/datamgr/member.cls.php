@@ -22,6 +22,16 @@
 	{
 		
 	}
+
+	public function getPosterCreatedMemberId($poster_id){
+		$poster_id=$poster_id+0;
+		$sql="select created_id from tb_n_poster where id=$poster_id ";
+		$query = $this->dbmgr->query($sql);
+		$result = $this->dbmgr->fetch_array($query); 
+
+		return $result["created_id"]+0;
+	}
+
 	public function loginReg($mobile,$password){
 	
 		if($mobile==""){

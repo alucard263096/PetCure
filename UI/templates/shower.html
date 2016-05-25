@@ -1,5 +1,4 @@
 {{include  file="$smarty_root/header.html" }}
-{{include  file="$smarty_root/upload.html" }}
 
 <section>
     <section class="vbox">
@@ -67,7 +66,7 @@
 
             if (type == "1") {
                 if ("{{$member.id}}" == created_member) {
-                    window.location.href = "{{$rootpath}}/hintlist.php?poster_id={{$REQUEST.id}}";
+                    window.location.href = "{{$rootpath}}/hint.php?poster_id={{$REQUEST.id}}";
                     return;
                 }
             }

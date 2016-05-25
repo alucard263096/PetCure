@@ -211,7 +211,7 @@
     }
     afterFileUpload = function (filesavename, filename) {
         var str = "<div class='col-xs-3'>"
-                        + "<img class='img-responsive' src='{{$uploadpath}}/pet/" + filesavename + "' pname='" + filesavename + "' />"
+                        + "<img class='img-thumbnail' src='{{$uploadpath}}/pet/" + filesavename + "' pname='" + filesavename + "' />"
                     + "</div>";
         $("#lsImages").prepend(str);
         if ($("#lsImages div").length > 8) {

@@ -1,0 +1,60 @@
+{{include  file="$smarty_root/header.html" }}
+
+<section>
+    <section class="vbox">
+        <section class="scrollable padder" id="divContent">
+            <div class="row">
+                <div class="col-xs-7 text-info" style="margin-top:10px;">13751082562</div>
+                <div class="col-xs-5 text-right" style="margin-top:5px;">刚刚</div>
+                <div class="col-xs-12" style="margin-top:5px;">万科广场 中国地球村</div>
+                <div class="col-xs-12 text-info" style="font-size:120%;margin-top:5px;margin-bottom:5px;">这里就是线索的描述了</div>
+                <div class="col-xs-3">
+                    <img class="img-thumbnail" src="{{$uploadpath}}/pet/eaf741e0cfa1205a585e15097aecbbe4.jpeg" />
+                </div>
+                <div class="col-xs-3">
+                    <img class="img-thumbnail" src="{{$uploadpath}}/pet/eaf741e0cfa1205a585e15097aecbbe4.jpeg" />
+                </div>
+            </div>
+            <hr />
+        </section>
+    </section>
+</section>
+<script>
+    $(document).ready(function () {
+        var json = {
+            poster_id: "{{$REQUEST.poster_id}}",
+            count:1000
+        };
+        callXmlLoader("{{$API}}/Poster/hintlist.php", json, function (e) {
+            var str = "";
+            for (var i = 0; i < e.length; i++) {
+                str += "<div class='row'>";
+                str += "<div class='col-xs-5 text-info' style='margin-top:10px;'>" + e[i].contact + "</div>";
+                str += "<div class='col-xs-7 text-right' style='margin-top:10px;'>" + GetExDateString(e[i].created_date) + "</div>";
+                str += "<div class='col-xs-12' style='margin-top:5px;'>"+e[i].address+"</div>";
+                str += "<div class='col-xs-12 text-info' style='font-size:120%;margin-top:5px;margin-bottom:5px;'>"+e[i].needs+"</div>";
+                str += getImg(e[i].photo1);
+                str += getImg(e[i].photo2);
+                str += getImg(e[i].photo3);
+                str += getImg(e[i].photo4);
+                str += getImg(e[i].photo5);
+                str += getImg(e[i].photo6);
+                str += getImg(e[i].photo7);
+                str += getImg(e[i].photo8);
+                str += "</div>";
+                str += "<hr />";
+            }
+            $("#divContent").html(str);
+        });
+    });
+    function getImg(photo) {
+        var str = "";
+        if ($.trim(photo) != "") {
+            str += "<div class='col-xs-3'>";
+            str += "<img class='img-thumbnail' src='{{$uploadpath}}/pet/"+photo+"' />";
+            str += "</div>";
+        }
+        return str;
+    }
+</script>
+{{include  file="$smarty_root/footer.html" }}
