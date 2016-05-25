@@ -13,7 +13,11 @@
   
   $needstips="流浪的小可爱需要什么...";
   if($_REQUEST["type"]=="1"){
-	$needstips="我现在最需要的帮助是...";
+	if($_REQUEST["poster_id"]>0){
+		$needstips="你有什么线索给急坏了的主人？";
+	}else{
+		$needstips="我现在最需要的帮助是...";
+	}
   }
   
   $smarty->assign("needstips",$needstips);

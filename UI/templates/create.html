@@ -41,6 +41,19 @@
                 </div>
                 <div class="col-xs-9"><span id="txtContact">{{$member.mobile}}</span></div>
             </div>
+            {{if $REQUEST.poster_id>0}}
+                {{if $REQUEST.type=='0'}}
+                <div class="row">
+                    <div class="col-xs-12 text-right">
+                        <div class="checkbox i-checks">
+                            <label class="text-success">
+                                <input id="cbSave" type="checkbox" checked><i></i>我已经成功解救
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                {{/if}}
+            {{/if}}
         </section>
     </section>
 </section>
@@ -86,6 +99,12 @@
                     photos += photo;
                 }
             });
+            var save = "N";
+            try{
+                save = $("#cbSave").prop("checked") ? "Y" : "N";
+            } catch (ex) {
+
+            }
             var json = {
                 "type": "{{$REQUEST.type}}"
                 , "needs": $("#txtNeeds").val()
@@ -95,6 +114,8 @@
                 , "lat": $("#txtLat").val()
                 , "lng": $("#txtLng").val()
                 , "member_id": "{{$member.id}}"
+                , "poster_id": "{{$REQUEST.poster_id}}"
+                , "save": save
             };
             callXmlLoader("{{$API}}/Poster/create.php", json, function (e) {
                 //alert(e.length);
@@ -180,8 +201,9 @@
         }, false);
     });
     function addrItemClick(name, address, lat, lng) {
+        alert("" + lat + "|" + lng);
         $("#txtAddress").text(name + " " + address);
-        $("#txtLag").val(lat);
+        $("#txtLat").val(lat);
         $("#txtLng").val(lng);
         $('#modal-form').modal('hide');
 

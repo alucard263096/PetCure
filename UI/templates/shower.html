@@ -67,11 +67,11 @@
 
             if (type == "1") {
                 if ("{{$member.id}}" == created_member) {
-                    window.location.href = "{{$rootpath}}/hintlist.php?poster_id={{$id}}";
+                    window.location.href = "{{$rootpath}}/hintlist.php?poster_id={{$REQUEST.id}}";
                     return;
                 }
             }
-            window.location.href = "{{$rootpath}}/create.php?poster_id={{$id}}&type=" + type;
+            window.location.href = "{{$rootpath}}/create.php?poster_id={{$REQUEST.id}}&type=" + type;
 
         });
 
