@@ -17,7 +17,7 @@ if(strstr($agent,"iphone")||strstr($agent,"mac")||strstr($agent,"ipad")){
 		WindowRedirect($CONFIG['URL']."/index.php");
 }else{
 	if(strstr($agent,"micromessenger")){
-		echo "请复制以下网址到手机浏览器中打开<br /><br />http://www.myhkdoc.com/PetCureApp/PetCure.apk";
+		WindowRedirect("http://a.app.qq.com/o/simple.jsp?pkgname=com.helpfooter.steve.petcure");
 	}else{
 		WindowRedirect("http://www.myhkdoc.com/PetCureApp/PetCure.apk");
 	}
