@@ -3,7 +3,7 @@
 #[Root]
 $CONFIG['rootpath']		= '/PetCure/UI';  
 //$CONFIG['charset']		= 'utf-8'; 
-$CONFIG['URL']="/PetCure/UI/";
+$CONFIG['URL']="http://www.myhkdoc.com/PetCure/UI";
 $CONFIG['API']="/PetCure/API";
 $CONFIG["SessionName"]="PetCure";
 $CONFIG["Title"]="流浪宠物日记";

@@ -14,7 +14,7 @@
 
   $created_member=$memberMgr->getPosterCreatedMemberId($_REQUEST["poster_id"]);
   if($created_member!=$member["id"]){
-	WindowRedirect($CONFIG['URL']."/index.php");
+	WindowRedirect($CONFIG['rootpath']."/index.php");
   }
   $smarty->assign("subform","Y");
   
