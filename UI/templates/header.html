@@ -44,7 +44,7 @@
                         $("#btnBackHome").click(function () {
 
                             try {
-                                window.history.go(-1);
+                                window.location.href="{{$lasturl}}";
                             } catch (ex) {
                                 window.location.href = "{{$rootpath}}/index.php";
                             }
