@@ -4,7 +4,7 @@
 
 <section>
     <section class="vbox">
-        <section class="scrollable padder-lg" id="map_geocoding" style="min-height:480px;" >
+        <section class="scrollable padder-lg" id="map_geocoding"  >
         </section>
     </section>
 </section>
@@ -38,6 +38,7 @@
             initMap();
         });
         function initMap() {
+            $("#map_geocoding").css("height", screenheight-40);
             map = new qq.maps.Map(document.getElementById("map_geocoding"), {
                 center: new qq.maps.LatLng(22.543670, 114.059640),      // 地图的中心地理坐标。
                 zoom: 17,
