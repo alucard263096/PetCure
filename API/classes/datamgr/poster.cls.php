@@ -366,7 +366,8 @@
 			}
 		}
 		if($member_id>0){
-			$sql="select poster_id from tb_n_hint where created_id=$member_id and isread='N' ";
+			$sql="select a.poster_id from tb_n_hint a inner join tb_n_poster b on a.poster_id=b.id
+			 where b.created_id=$member_id and a.isread='N' ";
 			$query = $this->dbmgr->query($sql);
 			$rs = $this->dbmgr->fetch_array_all($query);
 
