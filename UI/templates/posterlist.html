@@ -1,10 +1,26 @@
 {{include  file="$smarty_root/header.html" }}
 
-
-
 <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no" src="http://apis.map.qq.com/tools/geolocation?key={{$MapKey}}&referer={{$Title}}"></iframe>
 <section>
     <section class="vbox">
+        <section class="scrollable"  >
+            <div class="row">
+                <div class="col-xs-6" style="padding-right:0px;">
+                    <select class="form-control m-b" style="background-color:transparent;width:100%;" id="ddlType">
+                        {{foreach from=$ddltype  item=rs }}
+                        <option value="{{$rs.val}}" {{if $rs.val==0}}selected=selected{{/if}}>{{$rs.name}}</option>
+                        {{/foreach}}
+                    </select>
+                </div>
+                <div class="col-xs-6" style="padding-left:0px;">
+                    <select class="form-control m-b" style="background-color:transparent;width:100%;" id="ddlOrder">
+                        {{foreach from=$ddlorder  item=rs }}
+                        <option value="{{$rs.val}}" {{if $rs.val==0}}selected=selected{{/if}}>{{$rs.name}}</option>
+                        {{/foreach}}
+                    </select>
+                </div>
+            </div>
+        </section>
         <section class="scrollable" id="lvMain" >
             <div class="row" style="margin-top:10px;">
                 <div class="col-xs-12 text-center">
@@ -19,27 +35,45 @@
     var lat = 22.543670, lng = 114.059640;
     var located = true;
     $(document).ready(function () {
-        window.addEventListener('message', function (event) {
-            loc = event.data;
-            if (located) {
-                if (loc && loc.module == 'geolocation') { //定位成功,防止其他应用也会向该页面post信息，需判断module是否为'geolocation'
-                    lat = loc.lat;
-                    lng = loc.lng;
+        $("#ddlType").change(function () {
+            page = 0;
+            LoadData();
+        });
+        $("#ddlOrder").change(function () {
+            page = 0;
+            LoadData();
+        });
+        if ("{{$located}}" == "Y") {
+            window.addEventListener('message', function (event) {
+                loc = event.data;
+                if (located) {
+                    if (loc && loc.module == 'geolocation') { //定位成功,防止其他应用也会向该页面post信息，需判断module是否为'geolocation'
+                        lat = loc.lat;
+                        lng = loc.lng;
+                    }
+                    located = false;
+                    LoadData();
                 }
-                located = false;
-                LoadData();
-            }
-        }, false);
+            }, false);
+        } else {
+            LoadData();
+        }
     });
     function LoadData() {
         $(".loadmore").remove();
+        if (page == 0) {
+            var str = "<div class='col-xs-12 text-center'>";
+            str+="<p>数据加载中<i class='icon-basket-loaded'></i></p>";
+            str += "</div>";
+            $("#lvMain").html(str);
+        }
         var json = {
             lat: lat,
             lng: lng,
             page: page,
             count: 20,
-            type: 0,
-            order: 0,
+            type: $("#ddlType").val(),
+            order: $("#ddlOrder").val(),
             member_id: "{{$member.id}}"
         };
         callXmlLoader("{{$API}}/Poster/{{$action}}.php", json, function (e) {
