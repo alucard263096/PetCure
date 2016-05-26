@@ -49,11 +49,11 @@
  
 
 
-   include ROOT.'/classes/mgr/wechat.cls.php';
+  include ROOT.'/classes/mgr/wechat.cls.php';
   $signPackage = $WechatMgr->GetSignPackage();
-  $userInfo = $WechatMgr->getUserBaseInfo();
+  //$userInfo = $WechatMgr->getUserBaseInfo();
 
   $smarty->assign("wechatsign",$signPackage);
-  $smarty->assign("userinfo",$userInfo);
+  //$smarty->assign("userinfo",$userInfo);
 
 ?>

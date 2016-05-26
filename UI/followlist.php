@@ -6,9 +6,10 @@
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
   require 'include/common.inc.php';
+  include ROOT.'/include/member.inc.php';
   include ROOT.'/include/init.inc.php';
 
-  $smarty->assign("action","list");
+  $smarty->assign("action","follow");
   $smarty->display(ROOT.'/templates/posterlist.html');
 
 ?>

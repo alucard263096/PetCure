@@ -6,6 +6,11 @@
 <section>
     <section class="vbox">
         <section class="scrollable" id="lvMain" >
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-12 text-center">
+                    <p>数据加载中<i class="icon-basket-loaded"></i></p>
+                </div>
+            </div>
         </section>
     </section>
 </section>
@@ -27,29 +32,48 @@
         }, false);
     });
     function LoadData() {
+        $(".loadmore").remove();
         var json = {
             lat: lat,
             lng: lng,
             page: page,
             count: 20,
             type: 0,
-            order: 0
+            order: 0,
+            member_id: "{{$member.id}}"
         };
-        callXmlLoader("{{$API}}/Poster/list.php", json, function (e) {
-            for (var i = 0; i < e.length; i++) {
-                var str = "<div class='row'>";
-                str += "<a href='{{$rootpath}}/shower.php?id=" + e[i].id + "'>";
-                str += "<div class='col-xs-12'>";
-                str += "<h3 class='padder'>"+e[i].needs+"</h3>";
-                str += "<div style='width:100%;height:200px; background:no-repeat center url({{$uploadpath}}/pet/"+e[i].photo+")'></div>";
-                str += "</div>";
-                str += "<div class='col-xs-12 text-right' style='margin-top:5px;padding-right:25px;'>";
-                str += "关注(" + e[i].followcount + ") 收藏(" + e[i].collectcount + ")";
-                str += "</div>";
-                str += "</a>";
-                str += "</div>";
-                str += "<hr />";
-                $("#lvMain").append(str);
+        callXmlLoader("{{$API}}/Poster/{{$action}}.php", json, function (e) {
+            if (page == 0) {
+                $("#lvMain").html("");
+            }
+            if (e.length > 0) {
+                for (var i = 0; i < e.length; i++) {
+                    var str = "<div class='row'>";
+                    str += "<a href='{{$rootpath}}/shower.php?id=" + e[i].id + "'>";
+                    str += "<div class='col-xs-12'>";
+                    str += "<h3 class='padder'>" + e[i].needs + "</h3>";
+                    str += "<div style='width:100%;height:200px; background:no-repeat center url({{$uploadpath}}/pet/" + e[i].photo + ")'></div>";
+                    str += "</div>";
+                    str += "<div class='col-xs-12 text-right' style='margin-top:5px;padding-right:25px;'>";
+                    str += "关注(" + e[i].followcount + ") 收藏(" + e[i].collectcount + ")";
+                    str += "</div>";
+                    str += "</a>";
+                    str += "</div>";
+                    str += "<hr />";
+                    $("#lvMain").append(str);
+                }
+                var more = "<div class='row loadmore'>";
+                more += "<div class='col-xs-12 text-center' style='background-color:#cccccc' onclick='LoadData();'><h4>点击加载更多</4>";
+                more += "</div>";
+                more += "</div>";
+                $("#lvMain").append(more);
+                page++;
+            } else {
+                var more = "<div class='row'>";
+                more += "<div class='col-xs-12 text-center' ><h5>没有数据了</h5>";
+                more += "</div>";
+                more += "</div>";
+                $("#lvMain").append(more);
             }
         });
     }
