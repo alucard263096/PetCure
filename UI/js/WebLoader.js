@@ -18,7 +18,7 @@ function loadXml(xmlDox) {
             arr[i] = node;
         }
     } catch (ex) {
-        alert("网络出错");
+        alert("网络出错"+xmlDox);
     }
     return arr;
 }
