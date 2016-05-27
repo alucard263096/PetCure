@@ -96,7 +96,7 @@
             $("#lsImages img").each(function () {
                 var photo = $(this).attr("pname");
                 if ($.trim(photo) != "") {
-                    photos += photo;
+                    photos += photo+";";
                 }
             });
             var save = "N";
