@@ -115,12 +115,21 @@
                     type = e[i].type;
                     created_member = e[i].created_member;
                     InitHelp();
-                    var news = new Array();
-                    news.title = e[i].needs;
-                    news.desc = e[i].address;
-                    news.link = "{{$Url}}/shower.php?id={{$REQUEST.id}}";
-                    news.imgUrl = "{{$Url}}/{{$uploadpath}}/pet/"+e[i].photo;
-                    shareNews(news);
+                    $("title").text(e[i].needs);
+                    $("#hdDescription").text(e[i].address);
+                    try{
+                        var news = {
+                            title: e[i].needs
+                            , desc: e[i].address
+                            , link: "{{$Url}}/shower.php?id={{$REQUEST.id}}"
+                            , imgUrl: "{{$Url}}/{{$uploadpath}}/pet/" + e[i].photo
+                        };
+                        shareNews(news);
+
+						
+                    }catch(ex){
+                        alert(ex.message);
+                    }
                 } else {
                     str += "<li data-target='#c-slide' data-slide-to='"+i+"' class=''></li>";
                 }
