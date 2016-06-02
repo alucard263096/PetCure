@@ -28,7 +28,6 @@ class ExcelMgr
 
 		$i=0;
 		foreach($header as $val){
-
 			if($val["type"]=="grid"){
 				continue;
 			}
@@ -98,6 +97,7 @@ class ExcelMgr
 			
 			$i++;
 		}
+		exit;
 		
 		$this->objPHPExcel->getActiveSheet()->setTitle('sheet 1');
 	}

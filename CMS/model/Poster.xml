@@ -4,6 +4,7 @@
   <tablename>tb_n_poster</tablename>
   <nolist>0</nolist>
   <searchcondition>r_main.status&lt;&gt;'D'</searchcondition>
+  <import>Y</import>
   <fields>
     <field>
       <name>发布类型</name>
@@ -41,6 +42,7 @@
       <type>upload</type>
       <uploadmodule>pet</uploadmodule>
       <filetype>image</filetype>
+      <notnull>1</notnull>
       <displayinlist>1</displayinlist>
       <disableindetail>1</disableindetail>
     </field>
