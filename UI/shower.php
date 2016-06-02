@@ -12,7 +12,7 @@
 	include ROOT.'/include/member.inc.php';
   }
 
-  
+  $smarty->assign("nodefault","Y");
   $smarty->assign("subform","Y");
   
   $smarty->display(ROOT.'/templates/shower.html');

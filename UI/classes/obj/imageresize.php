@@ -100,7 +100,7 @@ function resize($src,$w,$h)
     $name=$temp["basename"];//文件名     
     $dir=$temp["dirname"];//文件所在的文件夹     
     $extension=$temp["extension"];//文件扩展名     
-    $savepath="{$dir}/{$name}";//缩略图保存路径,新的文件名为*.thumb.jpg     
+    $savepath="{$dir}/a{$name}";//缩略图保存路径,新的文件名为*.thumb.jpg     
     
     //获取图片的基本信息     
     $info=$this->getImageInfo($src);     

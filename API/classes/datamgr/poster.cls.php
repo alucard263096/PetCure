@@ -366,9 +366,15 @@
 			}
 		}
 		if($member_id>0){
-			$sql="select poster_id from tb_n_hint where created_id=$member_id and isread='N' ";
+			$sql="select a.poster_id poster_id,a.id id from tb_n_hint a inner join tb_n_poster b on a.poster_id=b.id
+			 where b.created_id=$member_id and a.isread='N' ";
 			$query = $this->dbmgr->query($sql);
 			$rs = $this->dbmgr->fetch_array_all($query);
+
+			$ids="0";
+			for($i=0;$i<count($rs);$i++){
+				$ids=$ids.",".$rs[$i]["id"];
+			}
 
 			$count=count($rs);
 			if($count>0){
@@ -388,7 +394,7 @@
 				$ret[]=$r;
 
 				
-				$sql="update tb_n_hint set isread='Y' where  created_id=$member_id and isread='N'";
+				$sql="update tb_n_hint set isread='Y' where  id in ( $ids ) and isread='N'";
 				$this->dbmgr->query($sql);
 			}
 		}

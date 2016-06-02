@@ -25,11 +25,11 @@
 			            afterFileUpload(str.split('|~~|')[1], str.split('|~~|')[2]);
 
 			        } else {
-			            alert("上传失败，请联系管理员");
+			            alert("上传失败，请重试");
 			        }
 			    },
 			    "error": function (data, status, e) {
-			        alert("上传失败，请联系管理员");
+			        alert("上传失败，请重试");
 			    }
 			}
 		);

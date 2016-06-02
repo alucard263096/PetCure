@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>{{$Title}}</title>
-    <meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
+    <meta id="hdDescription" name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <link rel="stylesheet" href="{{$rootpath}}/css/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="{{$rootpath}}/css/animate.css" type="text/css" />
@@ -34,7 +34,8 @@
         var screenwidth = window.screen.width;
         var screenheight = window.screen.height;
         //alert(screenwidth+"|"+screenheight);
-    </script>
+    </script>    
+    {{include  file="$smarty_root/share.html" }}
 </head>
 <body class="">
     <section class="vbox">

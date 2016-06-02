@@ -39,7 +39,7 @@
                 <div class="col-xs-1">
                     <i class=" fa-phone fa"></i>
                 </div>
-                <div class="col-xs-9"><span id="txtContact">{{$member.mobile}}</span></div>
+                <div class="col-xs-9"><input type="text" style="background-color:transparent;border:0px;" id="txtContact" value="{{$member.mobile}}" /></div>
             </div>
             {{if $REQUEST.poster_id>0}}
                 {{if $REQUEST.type=='0'}}
@@ -96,7 +96,7 @@
             $("#lsImages img").each(function () {
                 var photo = $(this).attr("pname");
                 if ($.trim(photo) != "") {
-                    photos += photo;
+                    photos += photo+";";
                 }
             });
             var save = "N";
@@ -110,7 +110,7 @@
                 , "needs": $("#txtNeeds").val()
                 , "photos": photos
                 , "address": $("#txtAddress").text()
-                , "contact": $("#txtContact").text()
+                , "contact": $("#txtContact").val()
                 , "lat": $("#txtLat").val()
                 , "lng": $("#txtLng").val()
                 , "member_id": "{{$member.id}}"

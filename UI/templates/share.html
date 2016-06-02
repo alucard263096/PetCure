@@ -19,46 +19,46 @@
     ]
     });
     wx.ready(function () {
+        if ("{{$nodefault}}" != "Y") {
+            wx.onMenuShareAppMessage({
+                title: "宠物流浪日记,快速找到并分享附近需要帮助的流浪宠物",
+                desc: "快速找到并分享附近需要帮助的流浪宠物",
+                link: "{{$Url}}/index.php",
+                imgUrl: "{{$Url}}/img/logo.png",
+                trigger: function (res) {
+                    // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
+                    //alert('用户点击发送给朋友');
+                },
+                success: function (res) {
+                    //alert('已分享');
+                },
+                cancel: function (res) {
+                    //alert('已取消');
+                },
+                fail: function (res) {
+                    //alert("onMenuShareAppMessage" + JSON.stringify(res));
+                }
+            });
 
-        wx.onMenuShareAppMessage({
-            title: "宠物流浪日记,快速找到并分享附近需要帮助的流浪宠物",
-            desc: "快速找到并分享附近需要帮助的流浪宠物",
-            link: "{{$Url}}/index.php",
-            imgUrl: "{{$Url}}/img/logo.png",
-            trigger: function (res) {
-                // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
-                 //alert('用户点击发送给朋友');
-            },
-            success: function (res) {
-                //alert('已分享');
-            },
-            cancel: function (res) {
-                //alert('已取消');
-            },
-            fail: function (res) {
-                //alert("onMenuShareAppMessage" + JSON.stringify(res));
-            }
-        });
-
-        wx.onMenuShareTimeline({
-            title: "宠物流浪日记,快速找到并分享附近需要帮助的流浪宠物",
-            link: "{{$Url}}/index.php",
-            imgUrl: "{{$Url}}/img/logo.png",
-            trigger: function (res) {
-                // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
-                //alert('用户点击分享到朋友圈');
-            },
-            success: function (res) {
-                //alert('已分享');
-            },
-            cancel: function (res) {
-                //alert('已取消');
-            },
-            fail: function (res) {
-               // alert("onMenuShareTimeline" + JSON.stringify(res));
-            }
-        });
-
+            wx.onMenuShareTimeline({
+                title: "宠物流浪日记,快速找到并分享附近需要帮助的流浪宠物",
+                link: "{{$Url}}/index.php",
+                imgUrl: "{{$Url}}/img/logo.png",
+                trigger: function (res) {
+                    // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
+                    //alert('用户点击分享到朋友圈');
+                },
+                success: function (res) {
+                    //alert('已分享');
+                },
+                cancel: function (res) {
+                    //alert('已取消');
+                },
+                fail: function (res) {
+                    // alert("onMenuShareTimeline" + JSON.stringify(res));
+                }
+            });
+        }
     });
     wx.error(function (res) {
         //alert("错误了？" + res.errMsg);

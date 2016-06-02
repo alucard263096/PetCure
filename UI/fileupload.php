@@ -27,7 +27,7 @@
  $rezie=new Resize($folder.$filename,480,800);
  $rezie->DoResize();
 
- echo "|~~|".$filename."|~~|".$orifilename;
+ echo "|~~|a".$filename."|~~|".$orifilename;
 
 
 
