@@ -14,12 +14,17 @@ class XmlModel
 	  if($CONFIG["SupportMultiLanguage"]==true){
 		$this->XmlData=ResetNameWithLang($this->XmlData,$SysLangCode);
 	  }
+	  $this->XmlData["model"]=$name;
 	  $this->PageName=$pagename;
   }
 
   private function xmlToArray( $xml )
   {
      return json_decode(json_encode((array) simplexml_load_string($xml)), true);
+  }
+
+  public function getModelData(){
+	return $this->XmlData;
   }
   
   private function loadXmlFile($name){
@@ -495,6 +500,91 @@ class XmlModel
 	return "right".$id;
   }
 
+  public function Import($dbMgr,$smartyMgr,$request,$sysuser){
+	$file=$_FILES["file_import"];
+	if($file["error"]!="0"){
+		return "UPLOADERROR";
+	}
+	if ($file["type"] != "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"){
+		return "FILETYPEERROR";
+	}
+	$excelMgr=new ExcelMgr();
+	$excelarr=$excelMgr->read($file["tmp_name"]);
+	
+    $smartyMgr->assign("ModelData",$this->XmlData);
+    $smartyMgr->assign("PageName",$this->PageName);
+    $smartyMgr->assign("ImportData",$this->ImportDataCheck($excelarr,$dbMgr));
+    $smartyMgr->display(ROOT.'/templates/model/import.html');
+
+  }
+
+  public function ImportDataCheck($dataarr,$dbMgr){
+	$fields=$this->XmlData["fields"]["field"];
+	
+	$ret=array();
+	foreach($dataarr as $row){
+		$r=array();
+		foreach($fields as $fk=>$field){
+			foreach($row as $key=>$col){
+				if($key==$field["name"]){
+					$field["value"]=$col;
+					$field["display"]=$col;
+				}
+			}
+			
+			$field["error"]="0";
+			if($field["notnull"]==1&&$field["value"]==""){
+					$field["error"]="1";
+					$field["display"]="不为空";
+			}
+			if($field["type"]=="select"){
+				$options=$field["options"]["option"];
+				$opval="";
+				foreach($options as $option){
+					if($field["value"]==$option["name"]){
+						$opval=$option["value"];
+					}
+				}
+				if($opval==""){
+					$field["error"]="1";
+					$field["display"]=$field["display"]." 错误值";
+					$field["value"]=$opval;
+				}else{
+					$field["value"]=$opval;
+				}
+			}
+			if($field["type"]=="fkey"){
+				$tablename=$field["tablename"];
+				$tname=$field["ntbname"];
+				$condition=$field["condition"];
+				if($condition==""){
+					$condition=" 1=1 ";
+				}
+				$searchfield=$field["displayfield"];
+				$sql=" select id from $tablename as $tname where $condition and name='".$field["value"]."' ";
+				
+				$query = $dbMgr->query($sql);
+				$result = $dbMgr->fetch_array($query); 
+				if(($result["id"]+0)==0){
+					if($field["notnull"]==1){
+						$field["error"]="1";
+						$field["display"]=$field["display"]." 没有值";
+						$field["value"]=0;
+					}else{
+						$field["display"]="-";
+						$field["value"]=0;
+					}
+				}else{
+					$field["value"]=$result["id"];
+				}
+			}
+			$r[$field["key"]]=$field;
+		}
+		$ret[]=$r;
+	}
+	return $ret;
+  }
+
   public function Delete($dbMgr,$idlist,$sysuser){
     
 	$sql="update ".$this->XmlData["tablename"]." set status='D',updated_user=$sysuser,updated_date=".$dbMgr->getDate()." where id in ($idlist)";
@@ -528,6 +618,9 @@ class XmlModel
 		echo $result;
 	  }else if($action=="delete"){
 		$result=$this->Delete($dbmgr,$request["idlist"],$SysUser["id"]);
+		echo $result;
+	  }else if($action=="import"){
+		$result=$this->Import($dbmgr,$smarty,$request,$SysUser["id"]);
 		echo $result;
 	  }
 

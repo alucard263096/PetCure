@@ -158,8 +158,10 @@
                                         <div class="form-group col-md-12">
                                             <label class="col-md-2 control-label">{{$rs.name}}{{$SysLang.model.list}}</label>
                                             <div class="col-md-10">
+                                                {{if $rs.newitemurl!=""}}
                                                 <button class="btn btn-primary btnGridAdd" onclick="window.location.href='{{$rootpath}}/{{$rs.newitemurl}}{{$id}}&parenturl={{$request_url_encode}}';"><i class="glyphicon glyphicon-plus  glyphicon-white"></i> {{$SysLang.model.add}}{{$rs.name}}</button>
-                                                <table class="table table-striped" id="content_{{$rs.key}}"></table>
+                                                {{/if}}
+                                                <table class="table table-striped" id="content_{{$rs.key}}"></table>     
                                             </div>
                                         </div>             
                                         {{/if}}
@@ -354,7 +356,7 @@
        return true;
     }
 
-
+    
     function upload(key,module) {
         
         $.ajaxFileUpload

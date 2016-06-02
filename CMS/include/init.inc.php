@@ -27,18 +27,20 @@ $path=ROOT."/model/menu.xml";
 $fp = fopen($path,"r");
 $str = fread($fp,filesize($path));
 $MenuArray=json_decode(json_encode((array) simplexml_load_string($str)), true);
+ if($CONFIG["SupportMultiLanguage"]==true){
+		$MenuArray=ResetNameWithLang($MenuArray,$SysLangCode);
+	  }
 $_SESSION[SESSIONNAME]["SystemMenu"]=$MenuArray;
 }
-//print_r($MenuArray);
+
 if($smarty!=null){
 	$smarty->assign("SystemMenu",$MenuArray);
 	$smarty->assign("SysUser",$SysUser);
 }
 
 
+
 include ROOT.'/classes/datamgr/business.cls.php';
 $SysReminder=$businessMgr->getReminderCount($SysUser["id"]);
 $smarty->assign("SysReminder",$SysReminder);
-
-
 ?>

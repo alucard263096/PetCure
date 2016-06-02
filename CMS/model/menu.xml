@@ -57,5 +57,21 @@
         </submenu>
       </submenus>
     </mainmenu>
+    <mainmenu>
+      <module>poster</module>
+      <name>发布管理</name>
+      <submenus>
+        <submenu>
+          <id>poster_list</id>
+          <name>发布列表</name>
+          <url>/Poster/poster.php</url>
+        </submenu>
+        <submenu>
+          <id>#</id>
+          <name>#</name>
+          <url>#</url>
+        </submenu>
+      </submenus>
+    </mainmenu>
   </mainmenus>
 </root>

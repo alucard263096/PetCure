@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <name>record</name>
+  <tablename>tb_n_photo</tablename>
+  <nolist>0</nolist>
+  <searchcondition>1=1</searchcondition>
+  <fields>
+    <field>
+      <name>救助类型</name>
+      <key>poster_id</key>
+      <type>fkey</type>
+      <displayfield>id</displayfield>
+      <search>1</search>
+      <notnull>1</notnull>
+      <tablename>tb_n_poster</tablename>
+      <ntbname>r_cate</ntbname>
+    </field>
+    <field>
+      <name>背景图</name>
+      <key>photo</key>
+      <type>upload</type>
+      <uploadmodule>pet</uploadmodule>
+      <filetype>image</filetype>
+      <displayinlist>1</displayinlist>
+      <disableindetail>1</disableindetail>
+    </field>
+    <field>
+      <name>发布时间</name>
+      <key>created_date</key>
+      <type>text</type>
+      <notnull>1</notnull>
+      <search>1</search>
+      <displayinlist>1</displayinlist>
+      <disableindetail>1</disableindetail>
+    </field>
+  </fields>
+</root>
